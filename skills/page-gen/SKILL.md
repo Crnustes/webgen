@@ -89,6 +89,23 @@ Para la página [tipo] necesito:
 
 ## Workflow
 
+### Paso 0 — Leer el copy ANTES de generar (obligatorio)
+
+**⛔ NO generar HTML hasta completar este paso.**
+
+1. Verificar si existe `proyectos/[slug-proyecto]/_copy/[slug-pagina].md`
+2. **Si existe → LEER el archivo completo ahora** y extraer:
+   - H1 exacto
+   - Lead / subheadline exacto
+   - Nombre de cada sección y su copy
+   - Textos de FAQ (preguntas y respuestas)
+   - Texto y destino del CTA final
+3. Si NO existe → pedir los copys al usuario antes de continuar
+
+> **Regla absoluta:** Todo el texto visible del HTML viene del copy leído.  
+> **NUNCA** usar `[Kicker texto]`, `[H1 aquí]`, `[Descripción]` u otros placeholders en el HTML final.  
+> Si falta copy para una sección, omitir esa sección — no inventarla.
+
 ### Paso 1 — Leer DESIGN.md y WP Theme
 
 1. Leer `proyectos/[slug-proyecto]/DESIGN.md` — extraer tokens de color, tipografía, spacing
@@ -149,7 +166,18 @@ FAQ corto (3-5 preguntas)
 
 ### Paso 3 — Generar el HTML completo
 
-**CREAR el archivo `proyectos/[slug-proyecto]/[slug-pagina].html`** con este HTML:
+**CREAR el archivo `proyectos/[slug-proyecto]/[slug-pagina].html`** con el copy del Paso 0 integrado.
+
+**Antes de escribir el HTML, mapear:**
+```
+H1 del copy → <h1> del hero
+Lead del copy → <p> del hero
+Cada sección del copy → una <section> en el HTML
+Preguntas/respuestas del copy → <details> en el FAQ
+CTA del copy → texto y href del botón final
+```
+
+**Estructura base obligatoria:**
 
 ```html
 <!DOCTYPE html>
@@ -188,65 +216,65 @@ FAQ corto (3-5 preguntas)
 
 <main id="main-content">
 
-  <!-- HERO -->
+  <!-- HERO — usar H1 y lead exactos del copy -->
   <section class="wg-section" id="hero" data-reveal="up">
     <div class="wg-container">
-      <span class="wg-kicker">[Kicker texto]</span>
-      <h1>[H1 con keyword principal — entidad GEO: "[Marca] es [categoría] que ayuda a [audiencia] en [mercado]"]</h1>
-      <p>[Lead — 2-3 oraciones que refuerzan el H1]</p>
+      <span class="wg-kicker">[kicker del copy — si no hay, omitir este span]</span>
+      <h1>[H1 EXACTO del copy — no parafrasear]</h1>
+      <p>[Lead EXACTO del copy]</p>
       <div style="display:flex;gap:var(--space-sm);flex-wrap:wrap;margin-top:var(--space-md);">
-        <a href="#contacto" class="wg-btn-primary">[CTA principal]</a>
-        <a href="#features" class="wg-btn-outline">[CTA secundario]</a>
+        <a href="#contacto" class="wg-btn-primary">[CTA del copy]</a>
+        <a href="#features" class="wg-btn-outline">[CTA secundario del copy — si hay]</a>
       </div>
     </div>
   </section>
 
-  <!-- SECCIONES según tipo de página y copy recibido -->
+  <!-- SECCIONES — una por cada sección definida en el copy, en el mismo orden -->
   <!-- Alternar: .wg-section y .wg-section.wg-section--subtle -->
 
-  <!-- EJEMPLO: sección con cards (features, beneficios, proceso) -->
+  <!-- EJEMPLO: sección con cards — reemplazar TODOS los textos con el copy real -->
   <section class="wg-section wg-section--subtle" id="features" data-reveal="up">
     <div class="wg-container">
-      <span class="wg-kicker">[Kicker]</span>
-      <h2>[Título de sección]</h2>
-      <p>[Párrafo intro opcional]</p>
+      <span class="wg-kicker">[kicker del copy]</span>
+      <h2>[título de sección del copy]</h2>
+      <p>[intro de sección del copy — si hay]</p>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--space-md);margin-top:var(--space-lg);" class="wg-stagger">
         <article class="wg-card" data-delay="1">
-          <h3>[Título]</h3>
-          <p>[Descripción]</p>
+          <h3>[título item 1 del copy]</h3>
+          <p>[descripción item 1 del copy]</p>
         </article>
         <article class="wg-card" data-delay="2">
-          <h3>[Título]</h3>
-          <p>[Descripción]</p>
+          <h3>[título item 2 del copy]</h3>
+          <p>[descripción item 2 del copy]</p>
         </article>
         <article class="wg-card" data-delay="3">
-          <h3>[Título]</h3>
-          <p>[Descripción]</p>
+          <h3>[título item 3 del copy]</h3>
+          <p>[descripción item 3 del copy]</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- FAQ (obligatorio en about y servicio) -->
+  <!-- FAQ — preguntas y respuestas EXACTAS del copy -->
   <section class="wg-section" id="faq" data-reveal="up">
     <div class="wg-container">
-      <h2>Preguntas frecuentes</h2>
+      <h2>[título del bloque FAQ del copy]</h2>
       <div style="max-width:720px;margin-top:var(--space-lg);" class="wg-stagger">
         <details style="border-bottom:1px solid var(--color-border);padding:var(--space-sm) 0;" open>
-          <summary style="cursor:pointer;font-weight:600;">[Pregunta 1]</summary>
-          <p style="margin-top:var(--space-xs);color:var(--color-text-muted);">[Respuesta directa]</p>
+          <summary style="cursor:pointer;font-weight:600;">[pregunta 1 EXACTA del copy]</summary>
+          <p style="margin-top:var(--space-xs);color:var(--color-text-muted);">[respuesta 1 EXACTA del copy]</p>
         </details>
-        <!-- mínimo 5 preguntas -->
+        <!-- repetir por cada pregunta del copy — mínimo 5 -->
       </div>
     </div>
   </section>
 
-  <!-- CTA FINAL -->
+  <!-- CTA FINAL — texto del copy -->
   <section class="wg-section wg-section--dark" id="contacto" data-reveal="up">
     <div class="wg-container" style="text-align:center;">
-      <h2>[Título del CTA]</h2>
-      <p>[Refuerzo — por qué actuar ahora]</p>
-      <a href="#" class="wg-btn-primary" style="margin-top:var(--space-md);display:inline-block;">[Texto del CTA]</a>
+      <h2>[título CTA del copy]</h2>
+      <p>[subtexto CTA del copy]</p>
+      <a href="[destino CTA del copy]" class="wg-btn-primary" style="margin-top:var(--space-md);display:inline-block;">[texto botón del copy]</a>
     </div>
   </section>
 
