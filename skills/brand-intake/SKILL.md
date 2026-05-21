@@ -49,7 +49,58 @@ Convertir el brief del cliente en un `DESIGN.md` completo usando el formato de 9
 
 ## Workflow
 
-### Paso 1 — Recolección de información
+### Paso 0 — Definir slug del proyecto y crear estructura
+
+**Primera acción** antes de cualquier pregunta de diseño — preguntar:
+
+> ¿**Slug del proyecto**? (nombre de carpeta, minúsculas y sin espacios)  
+> ej: `clinica-dentalpro`, `restaurante-abc`, `agencia-xyz`
+
+Al recibir el slug, **CREAR** de inmediato:
+
+**Archivo `proyectos/[slug]/_copy/_INSTRUCCIONES.md`** con este contenido:
+
+````markdown
+# Copys del proyecto — [slug]
+
+Esta carpeta contiene los textos aprobados por la agencia, uno por página.
+El agente leerá estos archivos al generar el HTML de cada página.
+
+## Cómo agregar copys
+Crear un archivo `.md` por página con el nombre del slug de la página.
+
+| Página | Archivo a crear |
+|---|---|
+| Home | `home.md` |
+| Nosotros | `about.md` |
+| [Servicio] | `servicios/[nombre].md` |
+| Contacto | `contacto.md` |
+
+## Estructura sugerida de cada archivo de copy
+```
+# H1 de la página
+
+## Hero
+**Lead:** [texto del lead]
+
+## Sección [Nombre]
+[Copy de la sección]
+
+## FAQ
+1. **¿Pregunta?** → Respuesta...
+
+## CTA
+**Texto del botón:** Agendar consulta
+**Destino:** /contacto/
+```
+````
+
+Confirmar con:
+> "✅ Carpeta `proyectos/[slug]/` y `_copy/` creadas. Ahora el brief de marca."
+
+---
+
+### Paso 1 — Recopilación de información
 
 Si el cliente no proveyó inputs completos, hacer estas preguntas en UNA sola respuesta (no una a la vez):
 
@@ -134,7 +185,7 @@ Presentar el DESIGN.md con:
 
 ## Output esperado
 
-Archivo `DESIGN.md` en la raíz del proyecto con:
+Archivo `proyectos/[slug]/DESIGN.md` con:
 - Las 9 secciones completas
 - Tokens CSS reales (valores hex verificados)
 - Escala tipográfica con `clamp()` 
@@ -151,4 +202,4 @@ El DESIGN.md NO es el theme.css final. Es el **plan de diseño** en Markdown que
 - Sirve como contexto para las fases siguientes (UIKit, Home, páginas)
 - Es legible por humanos y por IA
 
-El CSS real se genera en la Fase 2 (UIKit) dentro de `uikit.html` y luego se extrae a `css/theme.css`.
+El CSS real se genera en la Fase 3 (WP Theme) como `proyectos/[slug]/wp-theme/style.css`.

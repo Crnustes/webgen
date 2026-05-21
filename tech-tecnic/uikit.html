@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Tecnic — UIKit · Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <style>
+    /* ══════════════════════════════════════════
+       TOKENS — Tech Tecnic Design System
+    ══════════════════════════════════════════ */
+    :root {
+      /* Fondos */
+      --color-bg:           #0d0d11;
+      --color-bg-subtle:    #13131c;
+      --color-bg-dark:      #080809;
+
+      /* Superficies */
+      --color-surface:      #1c1c28;
+      --color-surface-2:    #24243a;
+
+      /* Texto */
+      --color-text:         #edeef2;
+      --color-text-muted:   #8888a0;
+      --color-text-on-dark: #f0f0f5;
+
+      /* Acento de marca */
+      --color-accent:       #C9382A;
+      --color-accent-rgb:   201, 56, 42;
+      --color-accent-2:     #00B4C4;
+
+      /* Bordes */
+      --color-border:         rgba(255,255,255,0.08);
+      --color-border-strong:  rgba(255,255,255,0.16);
+
+      /* Tipografía */
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+
+      /* Escala tipográfica */
+      --text-hero:    clamp(3.2rem, 7vw, 7rem);
+      --text-h1:      clamp(2.4rem, 5vw, 4.5rem);
+      --text-h2:      clamp(1.8rem, 3.2vw, 2.75rem);
+      --text-h3:      clamp(1.25rem, 2vw, 1.6rem);
+      --text-h4:      1.125rem;
+      --text-lead:    clamp(1rem, 1.5vw, 1.2rem);
+      --text-body:    1rem;
+      --text-small:   0.875rem;
+      --text-label:   0.75rem;
+      --text-kicker:  0.6875rem;
+
+      /* Radii */
+      --radius-sm:    3px;
+      --radius-md:    6px;
+      --radius-lg:    10px;
+      --radius-xl:    16px;
+      --radius-pill:  999px;
+
+      /* Espaciado */
+      --space-1:  4px;  --space-2:  8px;  --space-3: 12px;
+      --space-4: 16px;  --space-6: 24px;  --space-8: 32px;
+      --space-10: 40px; --space-12: 48px; --space-16: 64px;
+      --space-20: 80px; --space-24: 96px;
+    }
+
+    /* ══════════════════════════════════════════
+       RESET MÍNIMO
+    ══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ══════════════════════════════════════════
+       TIPOGRAFÍA BASE
+    ══════════════════════════════════════════ */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      text-wrap: balance;
+    }
+    h1 { font-size: var(--text-h1); font-weight: 800; line-height: 1.0;  letter-spacing: -0.03em; }
+    h2 { font-size: var(--text-h2); font-weight: 700; line-height: 1.1;  letter-spacing: -0.02em; }
+    h3 { font-size: var(--text-h3); font-weight: 700; line-height: 1.2;  letter-spacing: -0.01em; }
+    h4 { font-size: var(--text-h4); font-weight: 600; line-height: 1.25; }
+    p  { font-size: var(--text-body); line-height: 1.65; max-width: 65ch; color: var(--color-text-muted); }
+    .lead { font-size: var(--text-lead); line-height: 1.75; color: var(--color-text-muted); }
+
+    /* ══════════════════════════════════════════
+       LAYOUT UTILITIES
+    ══════════════════════════════════════════ */
+    .container  { width: min(1280px, 92vw); margin: 0 auto; }
+    .section    { padding: clamp(64px, 8vw, 120px) 0; }
+    .grid-2     { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .grid-3     { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid-4     { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ══════════════════════════════════════════
+       NAV DE SECCIONES (UIKit nav)
+    ══════════════════════════════════════════ */
+    .uikit-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,8,9,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--color-border);
+      padding: 12px 0;
+    }
+    .uikit-nav-inner {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      width: min(1280px, 92vw); margin: 0 auto;
+    }
+    .uikit-nav a {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      transition: color 150ms, border-color 150ms;
+      white-space: nowrap;
+    }
+    .uikit-nav a:hover {
+      color: var(--color-text);
+      border-color: var(--color-border-strong);
+    }
+    .uikit-nav .brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.875rem;
+      color: var(--color-text);
+      margin-right: 12px;
+    }
+    .uikit-nav .brand span { color: var(--color-accent); }
+
+    /* ══════════════════════════════════════════
+       SECCIÓN HEADER INTERNA (UIKit)
+    ══════════════════════════════════════════ */
+    .uikit-section-header {
+      margin-bottom: 48px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .uikit-section-header h2 {
+      font-size: 1.5rem;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+    .uikit-section-header p {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      max-width: none;
+    }
+    .uikit-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    /* ══════════════════════════════════════════
+       1. COLOR PALETTE
+    ══════════════════════════════════════════ */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .swatch {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+    }
+    .swatch-color { height: 80px; }
+    .swatch-info {
+      padding: 12px;
+      background: var(--color-surface);
+    }
+    .swatch-name {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--color-text);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ══════════════════════════════════════════
+       2. TIPOGRAFÍA
+    ══════════════════════════════════════════ */
+    .type-sample { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--color-border); }
+    .type-meta {
+      display: flex; gap: 16px; align-items: baseline;
+      font-family: var(--font-mono); font-size: 0.6875rem;
+      color: var(--color-text-muted); margin-bottom: 8px;
+    }
+    .hero-sample {
+      font-family: var(--font-display);
+      font-size: var(--text-hero);
+      font-weight: 800;
+      line-height: 0.93;
+      letter-spacing: -0.04em;
+    }
+    .hero-sample em { color: var(--color-accent); font-style: normal; }
+
+    /* ══════════════════════════════════════════
+       3. KICKER / EYEBROW
+    ══════════════════════════════════════════ */
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(var(--color-accent-rgb), 0.10);
+      border: 1px solid rgba(var(--color-accent-rgb), 0.25);
+      font-family: var(--font-mono);
+      font-size: var(--text-kicker);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 20px;
+    }
+    .kicker--cyan {
+      background: rgba(0,180,196,0.10);
+      border-color: rgba(0,180,196,0.25);
+      color: var(--color-accent-2);
+    }
+    .kicker--neutral {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-muted);
+    }
+
+    /* ══════════════════════════════════════════
+       4. BOTONES
+    ══════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border-radius: var(--radius-md);
+      padding: 14px 28px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: opacity 150ms ease, transform 150ms ease, background 150ms ease, border-color 150ms ease, color 150ms ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--color-accent); color: #fff; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-secondary {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border-strong);
+    }
+    .btn-secondary:hover { background: var(--color-surface-2); border-color: rgba(255,255,255,0.28); }
+    .btn-outline {
+      background: transparent;
+      color: var(--color-accent);
+      border: 1.5px solid var(--color-accent);
+    }
+    .btn-outline:hover { background: rgba(var(--color-accent-rgb), 0.08); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-muted);
+      border: none;
+      padding: 14px 20px;
+    }
+    .btn-ghost:hover { color: var(--color-text); transform: translateY(-1px); }
+    .btn-sm  { padding: 10px 20px; font-size: 0.875rem; }
+    .btn-lg  { padding: 18px 40px; font-size: 1rem; }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+    /* ══════════════════════════════════════════
+       5. CARDS
+    ══════════════════════════════════════════ */
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      transition: border-color 200ms ease;
+    }
+    .card:hover { border-color: rgba(var(--color-accent-rgb), 0.40); }
+    .card-title { font-family: var(--font-display); font-size: var(--text-h4); font-weight: 700; color: var(--color-text); margin-bottom: 8px; }
+    .card-body  { font-size: var(--text-small); color: var(--color-text-muted); line-height: 1.65; max-width: none; }
+    .card--tech {
+      border-top: 2px solid var(--color-accent);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+    .card--elevated {
+      background: var(--color-surface);
+      box-shadow: 0 0 0 1px rgba(var(--color-accent-rgb), 0.20);
+      border-color: rgba(var(--color-accent-rgb), 0.20);
+    }
+    .card--dark {
+      background: var(--color-bg-dark);
+      border-color: var(--color-border);
+      color: var(--color-text-on-dark);
+    }
+    .card-icon {
+      width: 44px; height: 44px;
+      background: rgba(var(--color-accent-rgb), 0.10);
+      border: 1px solid rgba(var(--color-accent-rgb), 0.20);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    /* ══════════════════════════════════════════
+       6. FORMULARIOS
+    ══════════════════════════════════════════ */
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--text-kicker);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 8px;
+    }
+    .input, .select, .textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+      appearance: none;
+    }
+    .input::placeholder, .textarea::placeholder { color: var(--color-text-muted); opacity: 0.7; }
+    .input:focus, .select:focus, .textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(var(--color-accent-rgb), 0.15);
+    }
+    .textarea { resize: vertical; min-height: 120px; }
+    .select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238888a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    /* Toggle switch */
+    .toggle-wrapper { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .toggle {
+      position: relative;
+      width: 44px; height: 24px;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-pill);
+      transition: background 200ms;
+    }
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--color-text-muted);
+      transition: transform 200ms, background 200ms;
+    }
+    .toggle--on { background: var(--color-accent); border-color: var(--color-accent); }
+    .toggle--on::after { transform: translateX(20px); background: #fff; }
+    /* Checkbox */
+    .checkbox-wrapper { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+    .checkbox {
+      width: 18px; height: 18px; flex-shrink: 0;
+      border: 1.5px solid var(--color-border-strong);
+      border-radius: 3px;
+      background: var(--color-surface);
+      display: grid; place-content: center;
+      transition: background 150ms, border-color 150ms;
+    }
+    .checkbox--checked { background: var(--color-accent); border-color: var(--color-accent); }
+    .checkbox--checked::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+
+    /* ══════════════════════════════════════════
+       7. BADGES / TAGS / CHIPS
+    ══════════════════════════════════════════ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge--red    { background: rgba(var(--color-accent-rgb),0.15); color: var(--color-accent); border: 1px solid rgba(var(--color-accent-rgb),0.3); }
+    .badge--cyan   { background: rgba(0,180,196,0.12); color: var(--color-accent-2); border: 1px solid rgba(0,180,196,0.3); }
+    .badge--neutral{ background: rgba(255,255,255,0.06); color: var(--color-text-muted); border: 1px solid var(--color-border-strong); }
+    .badge--green  { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: border-color 150ms, color 150ms;
+    }
+    .tag:hover { border-color: rgba(var(--color-accent-rgb),0.4); color: var(--color-text); }
+    .tag--active {
+      border-color: rgba(var(--color-accent-rgb),0.4);
+      background: rgba(var(--color-accent-rgb),0.08);
+      color: var(--color-accent);
+    }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* ══════════════════════════════════════════
+       8. DIVISOR JAPONÉS
+    ══════════════════════════════════════════ */
+    .divider { border: none; border-top: 1px solid var(--color-border); margin: 0; }
+    .divider--accent { border: none; border-top: 2px solid var(--color-accent); width: 40px; margin-bottom: 24px; }
+
+    /* ══════════════════════════════════════════
+       9. HERO VARIANTS
+    ══════════════════════════════════════════ */
+    .hero-demo {
+      background: var(--color-bg-dark);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px);
+      margin-bottom: 24px;
+    }
+    .hero-grid-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 4vw, 64px);
+      align-items: center;
+    }
+    @media (max-width: 768px) { .hero-grid-demo { grid-template-columns: 1fr; } }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--text-hero);
+      font-weight: 800;
+      line-height: 0.93;
+      letter-spacing: -0.04em;
+      color: var(--color-text-on-dark);
+      margin-bottom: 24px;
+    }
+    .hero-title em { color: var(--color-accent); font-style: normal; }
+    .hero-lead {
+      font-size: var(--text-lead);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      max-width: 46ch;
+    }
+    .hero-visual {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-lg);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* ══════════════════════════════════════════
+       10. FEATURES SECTION
+    ══════════════════════════════════════════ */
+    .feature-section-demo {
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: clamp(48px, 6vw, 80px) clamp(32px, 5vw, 64px);
+    }
+    .section-header { text-align: left; margin-bottom: 48px; }
+    .section-header h2 { color: var(--color-text); margin-bottom: 12px; }
+    .section-header .lead { max-width: 48ch; }
+
+    /* ══════════════════════════════════════════
+       11. TESTIMONIALS
+    ══════════════════════════════════════════ */
+    .testimonial-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .testimonial-quote {
+      font-size: var(--text-lead);
+      color: var(--color-text);
+      line-height: 1.7;
+      max-width: none;
+      margin-bottom: 24px;
+    }
+    .testimonial-quote::before { content: '"'; color: var(--color-accent); font-family: var(--font-display); font-size: 2rem; line-height: 0; vertical-align: -0.5em; margin-right: 4px; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.875rem;
+      color: var(--color-accent);
+    }
+    .author-name  { font-weight: 600; font-size: var(--text-small); color: var(--color-text); }
+    .author-role  { font-size: var(--text-label); color: var(--color-text-muted); font-family: var(--font-mono); }
+
+    /* ══════════════════════════════════════════
+       12. CTA SECTION
+    ══════════════════════════════════════════ */
+    .cta-full {
+      background: var(--color-accent);
+      border-radius: var(--radius-xl);
+      padding: clamp(48px, 6vw, 80px);
+      text-align: center;
+    }
+    .cta-full h2 { color: #fff; font-size: var(--text-h2); margin-bottom: 16px; }
+    .cta-full p  { color: rgba(255,255,255,0.8); max-width: 48ch; margin: 0 auto 36px; }
+    .btn-cta-white {
+      background: #fff;
+      color: var(--color-accent);
+      font-family: var(--font-body);
+      font-weight: 700;
+      padding: 16px 36px;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 150ms;
+      display: inline-block;
+    }
+    .btn-cta-white:hover { opacity: 0.9; }
+
+    /* ══════════════════════════════════════════
+       13. STATS
+    ══════════════════════════════════════════ */
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      color: var(--color-text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .stat-number em { color: var(--color-accent); font-style: normal; }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-label);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-top: 8px;
+    }
+
+    /* ══════════════════════════════════════════
+       14. NAVEGACIÓN
+    ══════════════════════════════════════════ */
+    .nav-demo {
+      background: rgba(13,13,17,0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--color-text);
+    }
+    .nav-brand span { color: var(--color-accent); }
+    .nav-links {
+      display: flex; gap: 4px; align-items: center; list-style: none;
+    }
+    .nav-links a {
+      padding: 8px 14px;
+      border-radius: var(--radius-md);
+      font-size: var(--text-small);
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color 150ms, background 150ms;
+    }
+    .nav-links a:hover { color: var(--color-text); background: var(--color-surface); }
+    .nav-links a.active { color: var(--color-text); }
+    .nav-cta { display: flex; align-items: center; gap: 8px; }
+    .hamburger {
+      display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 1.5px;
+      background: var(--color-text-muted);
+      border-radius: 2px;
+      transition: all 200ms;
+    }
+
+    /* ══════════════════════════════════════════
+       15. FOOTER
+    ══════════════════════════════════════════ */
+    .footer-demo {
+      background: var(--color-bg-dark);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: clamp(48px, 6vw, 64px);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    .footer-brand-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.125rem;
+      color: var(--color-text);
+      margin-bottom: 12px;
+    }
+    .footer-brand-name span { color: var(--color-accent); }
+    .footer-desc { font-size: var(--text-small); color: var(--color-text-muted); max-width: 28ch; margin-bottom: 20px; }
+    .footer-col-title {
+      font-family: var(--font-mono);
+      font-size: var(--text-kicker);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: var(--color-text-muted);
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a { font-size: var(--text-small); color: var(--color-text-muted); transition: color 150ms; }
+    .footer-links a:hover { color: var(--color-text); }
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); }
+
+    /* ══════════════════════════════════════════
+       16. ANIMACIONES — Progressive Enhancement
+    ══════════════════════════════════════════ */
+    [data-reveal] { /* visible sin JS */ }
+    .js [data-reveal]            { opacity: 0; transform: translateY(24px); will-change: opacity, transform; }
+    .js [data-reveal="left"]     { transform: translateX(-32px); opacity: 0; }
+    .js [data-reveal="right"]    { transform: translateX(32px);  opacity: 0; }
+    .js [data-reveal].is-visible {
+      opacity: 1; transform: none;
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      [data-reveal] { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════════
+       LAYOUT DE DEMO
+    ══════════════════════════════════════════ */
+    .demo-block { margin-bottom: 40px; }
+    .demo-row   { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+    .demo-col   { flex: 1; min-width: 200px; }
+    .spacer-8   { height: 8px;  } .spacer-16 { height: 16px; }
+    .spacer-24  { height: 24px; } .spacer-32 { height: 32px; }
+    .spacer-48  { height: 48px; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     NAVEGACIÓN INTERNA DEL UIKIT
+════════════════════════════════════════ -->
+<nav class="uikit-nav">
+  <div class="uikit-nav-inner">
+    <span class="brand">Tech<span>Tecnic</span> · UIKit</span>
+    <a href="#colores">Colores</a>
+    <a href="#tipografia">Tipografía</a>
+    <a href="#kickers">Kickers</a>
+    <a href="#botones">Botones</a>
+    <a href="#cards">Cards</a>
+    <a href="#formularios">Formularios</a>
+    <a href="#badges">Badges</a>
+    <a href="#hero">Hero</a>
+    <a href="#features">Features</a>
+    <a href="#stats">Stats</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="#cta">CTA</a>
+    <a href="#nav">Nav</a>
+    <a href="#footer">Footer</a>
+    <a href="#animaciones">Animaciones</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════════
+     1. PALETA DE COLORES
+════════════════════════════════════════ -->
+<section id="colores" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Paleta de Colores</h2>
+      <p>tokens CSS · valores verificados con contraste WCAG AAA en bg principal</p>
+    </div>
+
+    <p class="uikit-label">Fondos</p>
+    <div class="spacer-8"></div>
+    <div class="swatch-grid demo-block">
+      <div class="swatch"><div class="swatch-color" style="background:#080809"></div><div class="swatch-info"><span class="swatch-name">--color-bg-dark</span><span class="swatch-hex">#080809</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#0d0d11"></div><div class="swatch-info"><span class="swatch-name">--color-bg</span><span class="swatch-hex">#0d0d11</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#13131c"></div><div class="swatch-info"><span class="swatch-name">--color-bg-subtle</span><span class="swatch-hex">#13131c</span></div></div>
+    </div>
+
+    <p class="uikit-label">Superficies</p>
+    <div class="spacer-8"></div>
+    <div class="swatch-grid demo-block">
+      <div class="swatch"><div class="swatch-color" style="background:#1c1c28"></div><div class="swatch-info"><span class="swatch-name">--color-surface</span><span class="swatch-hex">#1c1c28</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#24243a"></div><div class="swatch-info"><span class="swatch-name">--color-surface-2</span><span class="swatch-hex">#24243a</span></div></div>
+    </div>
+
+    <p class="uikit-label">Texto</p>
+    <div class="spacer-8"></div>
+    <div class="swatch-grid demo-block">
+      <div class="swatch"><div class="swatch-color" style="background:#edeef2"></div><div class="swatch-info"><span class="swatch-name">--color-text</span><span class="swatch-hex">#edeef2</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#8888a0"></div><div class="swatch-info"><span class="swatch-name">--color-text-muted</span><span class="swatch-hex">#8888a0</span></div></div>
+    </div>
+
+    <p class="uikit-label">Acentos de marca</p>
+    <div class="spacer-8"></div>
+    <div class="swatch-grid demo-block">
+      <div class="swatch"><div class="swatch-color" style="background:#C9382A"></div><div class="swatch-info"><span class="swatch-name">--color-accent</span><span class="swatch-hex">#C9382A · Bermellón japonés</span></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#00B4C4"></div><div class="swatch-info"><span class="swatch-name">--color-accent-2</span><span class="swatch-hex">#00B4C4 · Cian tecnológico</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     2. TIPOGRAFÍA
+════════════════════════════════════════ -->
+<section id="tipografia" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Tipografía</h2>
+      <p>Syne (display) · Inter (body) · JetBrains Mono (labels)</p>
+    </div>
+
+    <div class="type-sample">
+      <div class="type-meta"><span>HERO</span><span>Syne 800</span><span>clamp(3.2rem, 7vw, 7rem)</span><span>lh: 0.93</span></div>
+      <div class="hero-sample">Infraestructura<br><em>que no falla.</em></div>
+    </div>
+
+    <div class="type-sample">
+      <div class="type-meta"><span>H1</span><span>Syne 800</span><span>clamp(2.4rem, 5vw, 4.5rem)</span></div>
+      <h1>Soporte técnico especializado</h1>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta"><span>H2</span><span>Syne 700</span><span>clamp(1.8rem, 3.2vw, 2.75rem)</span></div>
+      <h2>Nuestros servicios principales</h2>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta"><span>H3</span><span>Syne 700</span><span>clamp(1.25rem, 2vw, 1.6rem)</span></div>
+      <h3>Monitoreo proactivo 24/7</h3>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta"><span>BODY LEAD</span><span>Inter 400</span><span>clamp(1rem, 1.5vw, 1.2rem)</span></div>
+      <p class="lead">Nos especializamos en infraestructura crítica para empresas que no pueden permitirse tiempo de inactividad. Respuesta en menos de 15 minutos.</p>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta"><span>BODY</span><span>Inter 400</span><span>1rem</span></div>
+      <p>Nuestro equipo de ingenieros certificados mantiene tus sistemas operando con el mayor uptime posible. Cada incidencia se documenta y se analiza para prevenir recurrencias.</p>
+    </div>
+    <div class="type-sample">
+      <div class="type-meta"><span>MONO LABEL</span><span>JetBrains Mono 700</span><span>0.6875rem · ALL CAPS</span></div>
+      <p style="font-family:var(--font-mono);font-size:0.6875rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--color-accent);max-width:none">SERVICIOS · INFRAESTRUCTURA · MONITOREO</p>
+    </div>
+
+    <div class="spacer-32"></div>
+    <p class="uikit-label">Números grandes · font-variant-numeric: tabular-nums</p>
+    <div class="spacer-16"></div>
+    <div style="display:flex;gap:48px;flex-wrap:wrap">
+      <div><div class="stat-number"><em>99.9</em>%</div><div class="stat-label">Uptime garantizado</div></div>
+      <div><div class="stat-number">+250</div><div class="stat-label">Clientes activos</div></div>
+      <div><div class="stat-number"><em>&lt;15</em>min</div><div class="stat-label">Tiempo de respuesta</div></div>
+      <div><div class="stat-number">12</div><div class="stat-label">Años de experiencia</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     3. KICKERS / EYEBROW BADGES
+════════════════════════════════════════ -->
+<section id="kickers" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Kickers / Eyebrow</h2>
+      <p>Siempre antes del H2. JetBrains Mono ALL CAPS · letter-spacing 0.12em</p>
+    </div>
+    <div class="demo-row demo-block">
+      <div><p class="uikit-label">Acento principal</p><div class="spacer-8"></div><span class="kicker">Servicios</span></div>
+      <div><p class="uikit-label">Acento cian</p><div class="spacer-8"></div><span class="kicker kicker--cyan">Tecnología</span></div>
+      <div><p class="uikit-label">Neutral</p><div class="spacer-8"></div><span class="kicker kicker--neutral">Metodología</span></div>
+    </div>
+    <hr class="divider demo-block">
+    <p class="uikit-label">Divisor de acento japonés — 40px de ancho, intencional</p>
+    <div class="spacer-16"></div>
+    <div class="divider--accent"></div>
+    <h2 style="margin-top:0">Sección con divisor</h2>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     4. BOTONES
+════════════════════════════════════════ -->
+<section id="botones" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Botones</h2>
+      <p>Tamaños sm / md (default) / lg · Estados: default, hover, disabled</p>
+    </div>
+
+    <p class="uikit-label">Variantes</p>
+    <div class="spacer-16"></div>
+    <div class="btn-row demo-block">
+      <button class="btn btn-primary">Hablar con un técnico</button>
+      <button class="btn btn-secondary">Ver casos de éxito</button>
+      <button class="btn btn-outline">Saber más</button>
+      <button class="btn btn-ghost">Explorar →</button>
+    </div>
+
+    <p class="uikit-label">Tamaños</p>
+    <div class="spacer-16"></div>
+    <div class="btn-row demo-block">
+      <button class="btn btn-primary btn-sm">Small</button>
+      <button class="btn btn-primary">Medium (default)</button>
+      <button class="btn btn-primary btn-lg">Large</button>
+    </div>
+
+    <p class="uikit-label">Estado disabled</p>
+    <div class="spacer-16"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" disabled>Enviar (disabled)</button>
+      <button class="btn btn-secondary" disabled>Guardar (disabled)</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     5. CARDS
+════════════════════════════════════════ -->
+<section id="cards" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Cards</h2>
+      <p>Default · Tech (línea acento) · Elevated · Dark</p>
+    </div>
+
+    <div class="grid-3 demo-block">
+      <div class="card" data-reveal>
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Monitoreo 24/7</div>
+        <p class="card-body">Supervisión continua de tus servidores y servicios críticos con alertas inmediatas ante cualquier anomalía.</p>
+      </div>
+      <div class="card card--tech" data-reveal>
+        <div class="card-icon">🛡️</div>
+        <div class="card-title">Seguridad activa</div>
+        <p class="card-body">Protección proactiva contra amenazas, análisis de vulnerabilidades y respuesta a incidentes en tiempo real.</p>
+        <span style="color:var(--color-accent);font-size:0.75rem;font-family:var(--font-mono);display:block;margin-top:16px">card--tech</span>
+      </div>
+      <div class="card card--elevated" data-reveal>
+        <div class="card-icon">📡</div>
+        <div class="card-title">Infraestructura cloud</div>
+        <p class="card-body">Diseño, migración y gestión de arquitecturas en AWS, Azure y GCP con optimización de costos incluida.</p>
+        <span style="color:var(--color-accent-2);font-size:0.75rem;font-family:var(--font-mono);display:block;margin-top:16px">card--elevated</span>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card card--dark" data-reveal>
+        <div class="card-title" style="color:var(--color-text-on-dark)">Card Dark</div>
+        <p class="card-body">Para secciones en fondo muy oscuro o el footer. Borde sutil con opacidad baja.</p>
+      </div>
+      <div class="card" data-reveal style="padding:0;overflow:hidden">
+        <div style="aspect-ratio:16/9;background:var(--color-surface-2);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);font-family:var(--font-mono);font-size:0.75rem">imagen 16:9</div>
+        <div style="padding:24px">
+          <div class="card-title">Card con imagen</div>
+          <p class="card-body">Siempre aspect-ratio fijo en el contenedor de imagen para evitar layout shift.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     6. FORMULARIOS
+════════════════════════════════════════ -->
+<section id="formularios" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Formularios</h2>
+      <p>Input · Select · Textarea · Checkbox · Toggle · Radio</p>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="form-group">
+          <label class="form-label">Nombre completo</label>
+          <input class="input" type="text" placeholder="Ej. Carlos Ramírez">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input class="input" type="email" placeholder="correo@empresa.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo de servicio</label>
+          <select class="select">
+            <option>Seleccionar servicio…</option>
+            <option>Monitoreo 24/7</option>
+            <option>Seguridad activa</option>
+            <option>Cloud infrastructure</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensaje</label>
+          <textarea class="textarea" placeholder="Describe tu necesidad…"></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%">Enviar solicitud</button>
+      </div>
+      <div>
+        <p class="uikit-label" style="margin-bottom:20px">Controles de selección</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <label class="checkbox-wrapper">
+            <div class="checkbox checkbox--checked"></div>
+            <span style="font-size:var(--text-small);color:var(--color-text)">Acepto los términos y condiciones</span>
+          </label>
+          <label class="checkbox-wrapper">
+            <div class="checkbox"></div>
+            <span style="font-size:var(--text-small);color:var(--color-text-muted)">Recibir newsletter técnico</span>
+          </label>
+          <div class="spacer-8"></div>
+          <label class="toggle-wrapper">
+            <div class="toggle toggle--on"></div>
+            <span style="font-size:var(--text-small);color:var(--color-text)">Notificaciones activas</span>
+          </label>
+          <label class="toggle-wrapper">
+            <div class="toggle"></div>
+            <span style="font-size:var(--text-small);color:var(--color-text-muted)">Modo mantenimiento</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     7. BADGES / TAGS / CHIPS
+════════════════════════════════════════ -->
+<section id="badges" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Badges, Tags & Chips</h2>
+      <p>Uso limitado — comunicar estado, categoría o relevancia técnica</p>
+    </div>
+
+    <p class="uikit-label">Badges de estado</p>
+    <div class="spacer-16"></div>
+    <div class="chip-row demo-block">
+      <span class="badge badge--red">Incidencia activa</span>
+      <span class="badge badge--green">Operativo</span>
+      <span class="badge badge--cyan">Nuevo</span>
+      <span class="badge badge--neutral">En revisión</span>
+    </div>
+
+    <p class="uikit-label">Tags de categoría</p>
+    <div class="spacer-16"></div>
+    <div class="chip-row">
+      <span class="tag">AWS</span>
+      <span class="tag tag--active">Azure</span>
+      <span class="tag">GCP</span>
+      <span class="tag">Linux</span>
+      <span class="tag">Docker</span>
+      <span class="tag">Kubernetes</span>
+      <span class="tag">Security</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     8. HERO — 2 VARIANTES
+════════════════════════════════════════ -->
+<section id="hero" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Hero</h2>
+      <p>Variante 1: Texto + visual · Variante 2: Solo texto (centrado)</p>
+    </div>
+
+    <!-- Hero variante 1: 2 columnas -->
+    <p class="uikit-label">Variante 1 — Grid 2 col (60/40)</p>
+    <div class="spacer-16"></div>
+    <div class="hero-demo">
+      <div class="hero-grid-demo">
+        <div>
+          <span class="kicker">Infraestructura · Soporte</span>
+          <h1 class="hero-title">Tu empresa no puede<br>permitirse <em>fallar.</em></h1>
+          <p class="hero-lead">Tech Tecnic mantiene tu infraestructura tecnológica operando al 100%. Respuesta garantizada en menos de 15 minutos, los 365 días del año.</p>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-lg">Hablar con un técnico</button>
+            <button class="btn btn-ghost btn-lg">Ver casos de éxito →</button>
+          </div>
+        </div>
+        <div class="hero-visual">[ visual técnico / dashboard / isométrico ]</div>
+      </div>
+    </div>
+
+    <!-- Hero variante 2: solo texto -->
+    <p class="uikit-label">Variante 2 — Solo texto (centrado, para landing o about)</p>
+    <div class="spacer-16"></div>
+    <div class="hero-demo" style="text-align:center">
+      <span class="kicker" style="margin:0 auto 20px">Sobre nosotros</span>
+      <div style="max-width:52ch;margin:0 auto">
+        <h1 style="font-family:var(--font-display);font-size:var(--text-hero);font-weight:800;line-height:0.93;letter-spacing:-0.04em;color:var(--color-text-on-dark);margin-bottom:24px">
+          Precisión técnica.<br><em style="color:var(--color-accent)">Sin excusas.</em>
+        </h1>
+        <p class="hero-lead" style="margin:0 auto 36px;text-align:center">Desde 2012 mantenemos la infraestructura de más de 250 empresas en LATAM con el mayor estándar de exigencia técnica.</p>
+        <button class="btn btn-primary btn-lg">Conocer el equipo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     9. FEATURES / SERVICIOS
+════════════════════════════════════════ -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Features / Servicios</h2>
+      <p>Grid 3 col con cards · Cards con línea acento superior</p>
+    </div>
+
+    <div class="feature-section-demo" data-reveal>
+      <div class="section-header">
+        <span class="kicker">Servicios</span>
+        <h2>Todo lo que tu infraestructura necesita</h2>
+        <p class="lead">Desde el monitoreo diario hasta la respuesta ante crisis. Un solo equipo, todos los frentes cubiertos.</p>
+      </div>
+      <div class="grid-3">
+        <div class="card card--tech">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">Monitoreo proactivo</div>
+          <p class="card-body">Alertas automáticas antes de que el problema llegue al usuario final.</p>
+        </div>
+        <div class="card card--tech">
+          <div class="card-icon">🛡️</div>
+          <div class="card-title">Seguridad activa</div>
+          <p class="card-body">Análisis de vulnerabilidades, parcheo y respuesta a incidentes 24/7.</p>
+        </div>
+        <div class="card card--tech">
+          <div class="card-icon">☁️</div>
+          <div class="card-title">Cloud management</div>
+          <p class="card-body">Diseño, migración y optimización de costos en AWS, Azure y GCP.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     10. STATS
+════════════════════════════════════════ -->
+<section id="stats" class="section" style="background:var(--color-bg-dark)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Stats / Números</h2>
+      <p>Syne 800 · tabular-nums · sin cards, solo tipografía</p>
+    </div>
+    <div class="grid-4" data-reveal>
+      <div>
+        <div class="stat-number"><em>99.9</em>%</div>
+        <div class="stat-label">Uptime promedio</div>
+      </div>
+      <div>
+        <div class="stat-number">+250</div>
+        <div class="stat-label">Clientes activos</div>
+      </div>
+      <div>
+        <div class="stat-number"><em>&lt;15</em>m</div>
+        <div class="stat-label">Tiempo de respuesta</div>
+      </div>
+      <div>
+        <div class="stat-number">12</div>
+        <div class="stat-label">Años en operación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     11. TESTIMONIALS
+════════════════════════════════════════ -->
+<section id="testimonials" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Testimonials</h2>
+      <p>Sin avatars genéricos — iniciales o foto real · Grid 2 col</p>
+    </div>
+    <div class="grid-2">
+      <div class="testimonial-card" data-reveal>
+        <p class="testimonial-quote">Antes perdíamos horas cada semana en incidencias. Desde que trabajamos con Tech Tecnic, nuestra infraestructura simplemente funciona. El equipo responde antes de que nos demos cuenta del problema.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div>
+            <div class="author-name">Miguel Ríos</div>
+            <div class="author-role">CTO · Fintech MX</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-reveal>
+        <p class="testimonial-quote">Migramos 40 servidores a la nube en 72 horas sin un solo minuto de downtime. No pensé que fuera posible hasta que lo vimos con nuestros propios ojos.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AC</div>
+          <div>
+            <div class="author-name">Andrea Castillo</div>
+            <div class="author-role">Directora de Operaciones · Retail CO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     12. CTA SECTIONS
+════════════════════════════════════════ -->
+<section id="cta" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>CTA Sections</h2>
+      <p>Inline · Full-width con acento · Dark</p>
+    </div>
+
+    <p class="uikit-label">CTA Full — fondo bermellón</p>
+    <div class="spacer-16"></div>
+    <div class="cta-full demo-block" data-reveal>
+      <h2>¿Tu infraestructura está lista para lo que viene?</h2>
+      <p>Habla con un ingeniero hoy. Sin compromiso, sin presentaciones de ventas — solo una conversación técnica honesta.</p>
+      <a href="#" class="btn-cta-white">Agendar revisión gratuita</a>
+    </div>
+
+    <p class="uikit-label">CTA Inline — dentro de sección</p>
+    <div class="spacer-16"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px 40px" data-reveal>
+      <div>
+        <h3 style="margin-bottom:4px">¿Tienes una incidencia ahora?</h3>
+        <p style="max-width:none">Nuestro equipo está disponible 24 horas al día, 365 días al año.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary">Soporte urgente</button>
+        <button class="btn btn-outline">Ver SLA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     13. NAVEGACIÓN
+════════════════════════════════════════ -->
+<section id="nav" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Navegación</h2>
+      <p>Desktop + Mobile hamburger</p>
+    </div>
+
+    <p class="uikit-label">Desktop nav</p>
+    <div class="spacer-16"></div>
+    <div class="nav-demo demo-block">
+      <span class="nav-brand">Tech<span>Tecnic</span></span>
+      <ul class="nav-links">
+        <li><a href="#" class="active">Inicio</a></li>
+        <li><a href="#">Servicios</a></li>
+        <li><a href="#">Casos</a></li>
+        <li><a href="#">Empresa</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="#" class="btn btn-ghost btn-sm">Clientes</a>
+        <a href="#" class="btn btn-primary btn-sm">Hablar con soporte</a>
+      </div>
+    </div>
+
+    <p class="uikit-label">Mobile nav (hamburger)</p>
+    <div class="spacer-16"></div>
+    <div class="nav-demo" style="max-width:380px">
+      <span class="nav-brand">Tech<span>Tecnic</span></span>
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     14. FOOTER
+════════════════════════════════════════ -->
+<section id="footer" class="section">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Footer</h2>
+      <p>Grid 4 col · Fondo bg-dark</p>
+    </div>
+    <div class="footer-demo">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">Tech<span>Tecnic</span></div>
+          <p class="footer-desc">Infraestructura tecnológica crítica para empresas que no pueden permitirse fallar.</p>
+          <div class="btn-row" style="gap:8px">
+            <a href="#" class="btn btn-secondary btn-sm">LinkedIn</a>
+            <a href="#" class="btn btn-secondary btn-sm">Twitter/X</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-title">Servicios</p>
+          <ul class="footer-links">
+            <li><a href="#">Monitoreo 24/7</a></li>
+            <li><a href="#">Seguridad activa</a></li>
+            <li><a href="#">Cloud management</a></li>
+            <li><a href="#">Soporte técnico</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">Empresa</p>
+          <ul class="footer-links">
+            <li><a href="#">Nosotros</a></li>
+            <li><a href="#">Equipo</a></li>
+            <li><a href="#">Casos de éxito</a></li>
+            <li><a href="#">Blog técnico</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title">Contacto</p>
+          <ul class="footer-links">
+            <li><a href="#">hola@techtecnic.com</a></li>
+            <li><a href="#">+52 55 0000 0000</a></li>
+            <li><a href="#">Status page</a></li>
+            <li><a href="#">SLA & Políticas</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 Tech Tecnic. Todos los derechos reservados.</span>
+        <span class="footer-copy">Privacidad · Términos · Cookies</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     15. ANIMACIONES
+════════════════════════════════════════ -->
+<section id="animaciones" class="section" style="background:var(--color-bg-subtle)">
+  <div class="container">
+    <div class="uikit-section-header">
+      <h2>Animaciones</h2>
+      <p>GSAP + ScrollTrigger · Lenis smooth scroll · data-reveal</p>
+    </div>
+    <div class="grid-3">
+      <div class="card" data-reveal>
+        <div class="card-title">data-reveal (up)</div>
+        <p class="card-body">Elemento con <code style="font-family:var(--font-mono);color:var(--color-accent-2)">data-reveal</code>. Entra desde abajo al hacer scroll.</p>
+      </div>
+      <div class="card" data-reveal="left">
+        <div class="card-title">data-reveal="left"</div>
+        <p class="card-body">Entra desde la izquierda. Ideal para columnas de texto.</p>
+      </div>
+      <div class="card" data-reveal="right">
+        <div class="card-title">data-reveal="right"</div>
+        <p class="card-body">Entra desde la derecha. Ideal para visuales o imágenes.</p>
+      </div>
+    </div>
+    <div class="spacer-32"></div>
+    <div class="card" style="background:var(--color-bg-dark)">
+      <p class="uikit-label">Durations de referencia</p>
+      <div class="spacer-16"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-text-muted)">Micro (hover, focus)<br><span style="color:var(--color-text)">150–200ms · ease</span></div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-text-muted)">Estándar (reveal)<br><span style="color:var(--color-text)">400–700ms · power3.out</span></div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-text-muted)">Hero entrance<br><span style="color:var(--color-text)">800–1000ms · power3.out</span></div>
+        <div style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-text-muted)">Stagger grid<br><span style="color:var(--color-text)">0.08s entre items</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // Progressive enhancement
+  document.documentElement.classList.add('js');
+
+  // Lenis smooth scroll
+  const lenis = new Lenis({ lerp: 0.08, smooth: true });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // GSAP setup
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Hero entrance
+  gsap.fromTo('.hero-title > *',
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, stagger: 0.12, duration: 0.9, ease: 'power3.out', delay: 0.2 }
+  );
+
+  // Scroll reveal
+  gsap.utils.toArray('[data-reveal]').forEach(el => {
+    const dir = el.dataset.reveal;
+    const fromX = dir === 'left' ? -32 : dir === 'right' ? 32 : 0;
+    gsap.fromTo(el,
+      { opacity: 0, y: dir ? 0 : 30, x: fromX },
+      {
+        opacity: 1, y: 0, x: 0,
+        duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      }
+    );
+  });
+
+  // Stagger para grids
+  gsap.utils.toArray('.grid-3, .grid-4').forEach(parent => {
+    const items = parent.querySelectorAll('.card');
+    if (items.length < 2) return;
+    gsap.fromTo(items,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0,
+        stagger: 0.08, duration: 0.7, ease: 'power2.out',
+        scrollTrigger: { trigger: parent, start: 'top 80%', once: true }
+      }
+    );
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+/*
+Theme Name:  Tech Tecnic Child Theme
+Description: Child theme generado con WebGen para Tech Tecnic. Estética japonesa-tech, dark mode.
+Template:    hello-elementor
+Version:     1.0.0
+Author:      WebGen
+*/
+
+/* ═══════════════════════════════════════════════════════
+   TOKENS — Tech Tecnic Design System
+   ═══════════════════════════════════════════════════════ */
+:root {
+  /* Fondos */
+  --color-bg:           #0d0d11;
+  --color-bg-subtle:    #13131c;
+  --color-bg-dark:      #080809;
+
+  /* Superficies */
+  --color-surface:      #1c1c28;
+  --color-surface-2:    #24243a;
+
+  /* Texto */
+  --color-text:         #edeef2;
+  --color-text-muted:   #8888a0;
+  --color-text-on-dark: #f0f0f5;
+
+  /* Acento de marca */
+  --color-accent:       #C9382A;
+  --color-accent-rgb:   201, 56, 42;
+  --color-accent-2:     #00B4C4;
+
+  /* Bordes */
+  --color-border:         rgba(255, 255, 255, 0.08);
+  --color-border-strong:  rgba(255, 255, 255, 0.16);
+
+  /* Tipografía */
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Escala tipográfica — fluid con clamp() */
+  --text-hero:    clamp(3.2rem, 7vw, 7rem);
+  --text-h1:      clamp(2.4rem, 5vw, 4.5rem);
+  --text-h2:      clamp(1.8rem, 3.2vw, 2.75rem);
+  --text-h3:      clamp(1.25rem, 2vw, 1.6rem);
+  --text-h4:      1.125rem;
+  --text-lead:    clamp(1rem, 1.5vw, 1.2rem);
+  --text-body:    1rem;
+  --text-small:   0.875rem;
+  --text-label:   0.75rem;
+  --text-kicker:  0.6875rem;
+
+  /* Border radius */
+  --radius-sm:    3px;
+  --radius-md:    6px;
+  --radius-lg:    10px;
+  --radius-xl:    16px;
+  --radius-pill:  999px;
+
+  /* Espaciado */
+  --space-1:  4px;   --space-2:  8px;   --space-3:  12px;
+  --space-4:  16px;  --space-6:  24px;  --space-8:  32px;
+  --space-10: 40px;  --space-12: 48px;  --space-16: 64px;
+  --space-20: 80px;  --space-24: 96px;
+
+  /* Sombras — usamos borde en lugar de shadow en dark */
+  --shadow-sm:  none;
+  --shadow-md:  0 0 0 1px rgba(var(--color-accent-rgb), 0.20);
+  --shadow-lg:  0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 32px rgba(var(--color-accent-rgb), 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET MÍNIMO
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+img, video { max-width: 100%; display: block; }
+
+/* ═══════════════════════════════════════════════════════
+   TIPOGRAFÍA BASE
+   ═══════════════════════════════════════════════════════ */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+}
+h2 {
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+h3 {
+  font-size: var(--text-h3);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+h4 {
+  font-size: var(--text-h4);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+p {
+  font-size: var(--text-body);
+  line-height: 1.65;
+  max-width: 65ch;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LAYOUT GLOBAL
+   ═══════════════════════════════════════════════════════ */
+.wg-container {
+  width: min(1280px, 92vw);
+  margin: 0 auto;
+}
+
+.wg-section {
+  padding: clamp(64px, 8vw, 120px) 0;
+}
+
+/* Grids reutilizables */
+.wg-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+.wg-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.wg-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+@media (max-width: 767px) {
+  .wg-grid-2,
+  .wg-grid-3,
+  .wg-grid-4 { grid-template-columns: 1fr; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .wg-grid-3,
+  .wg-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   COMPONENTES — Clases para Elementor
+   ═══════════════════════════════════════════════════════ */
+
+/* Kicker / Eyebrow */
+.wg-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(var(--color-accent-rgb), 0.10);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.25);
+  font-family: var(--font-mono);
+  font-size: var(--text-kicker);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 20px;
+}
+.wg-kicker--cyan {
+  background: rgba(0, 180, 196, 0.10);
+  border-color: rgba(0, 180, 196, 0.25);
+  color: var(--color-accent-2);
+}
+.wg-kicker--neutral {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+/* Divisor de acento japonés */
+.wg-divider-accent {
+  border: none;
+  border-top: 2px solid var(--color-accent);
+  width: 40px;
+  margin-bottom: 24px;
+}
+
+/* Botón primario */
+.wg-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-accent);
+  color: #ffffff;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: opacity 150ms ease, transform 150ms ease;
+  text-decoration: none;
+}
+.wg-btn-primary:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Botón secundario */
+.wg-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border: 1px solid var(--color-border-strong);
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease;
+  text-decoration: none;
+}
+.wg-btn-secondary:hover {
+  background: var(--color-surface-2);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Botón outline */
+.wg-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--color-accent);
+  padding: 13px 27px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: 1.5px solid var(--color-accent);
+  cursor: pointer;
+  transition: background 150ms ease;
+  text-decoration: none;
+}
+.wg-btn-outline:hover {
+  background: rgba(var(--color-accent-rgb), 0.08);
+}
+
+/* Card default */
+.wg-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: border-color 200ms ease;
+}
+.wg-card:hover {
+  border-color: rgba(var(--color-accent-rgb), 0.40);
+}
+
+/* Card tech (con línea acento superior) */
+.wg-card-tech {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 2px solid var(--color-accent);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 32px;
+  transition: border-color 200ms ease;
+}
+
+/* Hero title */
+.wg-hero-title {
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 0.93;
+  letter-spacing: -0.04em;
+  color: var(--color-text-on-dark);
+  text-wrap: balance;
+}
+.wg-hero-title em {
+  color: var(--color-accent);
+  font-style: normal;
+}
+
+/* Lead text */
+.wg-lead {
+  font-size: var(--text-lead);
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  max-width: 52ch;
+}
+
+/* Stats */
+.wg-stat-number {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.wg-stat-number em {
+  color: var(--color-accent);
+  font-style: normal;
+}
+.wg-stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+}
+
+/* Sección fondo alternativo */
+.wg-bg-subtle  { background-color: var(--color-bg-subtle); }
+.wg-bg-dark    { background-color: var(--color-bg-dark); }
+.wg-bg-surface { background-color: var(--color-surface); }
+
+/* ═══════════════════════════════════════════════════════
+   ANIMACIONES — Progressive Enhancement
+   ═══════════════════════════════════════════════════════ */
+
+/* Sin JS: contenido visible */
+[data-reveal] { /* visible por defecto */ }
+
+/* Con JS: ocultar y preparar para animar */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  will-change: opacity, transform;
+}
+.js [data-reveal="left"]  { transform: translateX(-32px); opacity: 0; }
+.js [data-reveal="right"] { transform: translateX(32px);  opacity: 0; }
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Header con scroll */
+.site-header { transition: background 300ms ease, border-color 300ms ease; }
+.site-header.scrolled {
+  background: rgba(13, 13, 17, 0.95) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   REDUCED MOTION — Siempre incluir
+   ═══════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ELEMENTOR — Overrides globales
+   ═══════════════════════════════════════════════════════ */
+
+/* Forzar fuentes del design system en Elementor */
+.elementor-widget-heading .elementor-heading-title {
+  font-family: var(--font-display) !important;
+  text-wrap: balance;
+}
+.elementor-widget-text-editor p,
+.elementor-widget-text-editor li {
+  font-family: var(--font-body) !important;
+}
+
+/* Quitar padding default de secciones Elementor */
+.elementor-section.wg-section-reset > .elementor-container {
+  padding: 0;
+}

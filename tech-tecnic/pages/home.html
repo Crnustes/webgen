@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soporte Técnico Empresarial · Tech Tecnic</title>
+  <meta name="description" content="Tech Tecnic mantiene tu infraestructura tecnológica operando al 100%. Monitoreo proactivo, seguridad activa y respuesta en menos de 15 minutos. Más de 250 empresas confían en nosotros.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- GSAP + Lenis -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
+
+  <style>
+    /* ══════════════════════════════════════════
+       TOKENS
+    ══════════════════════════════════════════ */
+    :root {
+      --color-bg:           #0d0d11;
+      --color-bg-subtle:    #13131c;
+      --color-bg-dark:      #080809;
+      --color-surface:      #1c1c28;
+      --color-surface-2:    #24243a;
+      --color-text:         #edeef2;
+      --color-text-muted:   #8888a0;
+      --color-text-on-dark: #f0f0f5;
+      --color-accent:       #C9382A;
+      --color-accent-rgb:   201, 56, 42;
+      --color-accent-2:     #00B4C4;
+      --color-border:       rgba(255,255,255,0.08);
+      --color-border-strong:rgba(255,255,255,0.16);
+
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'Inter', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+
+      --text-hero:   clamp(3.2rem, 7vw, 7rem);
+      --text-h1:     clamp(2.4rem, 5vw, 4.5rem);
+      --text-h2:     clamp(1.8rem, 3.2vw, 2.75rem);
+      --text-h3:     clamp(1.25rem, 2vw, 1.6rem);
+      --text-h4:     1.125rem;
+      --text-lead:   clamp(1rem, 1.5vw, 1.2rem);
+      --text-body:   1rem;
+      --text-small:  0.875rem;
+      --text-label:  0.75rem;
+      --text-kicker: 0.6875rem;
+
+      --radius-sm:   3px;
+      --radius-md:   6px;
+      --radius-lg:   10px;
+      --radius-xl:   16px;
+      --radius-pill: 999px;
+    }
+
+    /* ══════════════════════════════════════════
+       RESET + BASE
+    ══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img  { max-width: 100%; display: block; }
+    a    { color: inherit; text-decoration: none; }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      text-wrap: balance;
+    }
+    h2 { font-size: var(--text-h2); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+    h3 { font-size: var(--text-h3); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+    h4 { font-size: var(--text-h4); font-weight: 600; line-height: 1.25; }
+
+    /* ══════════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════════ */
+    .container { width: min(1280px, 92vw); margin: 0 auto; }
+    .section    { padding: clamp(64px, 8vw, 120px) 0; }
+
+    /* ══════════════════════════════════════════
+       KICKER
+    ══════════════════════════════════════════ */
+    .kicker {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(var(--color-accent-rgb), 0.10);
+      border: 1px solid rgba(var(--color-accent-rgb), 0.25);
+      font-family: var(--font-mono);
+      font-size: var(--text-kicker);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 20px;
+    }
+    .kicker--neutral {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-muted);
+    }
+    .divider-accent {
+      border: none; border-top: 2px solid var(--color-accent);
+      width: 40px; margin-bottom: 24px;
+    }
+
+    /* ══════════════════════════════════════════
+       BOTONES
+    ══════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-body); font-weight: 600;
+      font-size: 0.9375rem; border-radius: var(--radius-md);
+      padding: 14px 28px; border: 2px solid transparent;
+      cursor: pointer; letter-spacing: 0.01em;
+      transition: opacity 150ms ease, transform 150ms ease, background 150ms ease, border-color 150ms ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--color-accent); color: #fff; border-color: transparent; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-outline {
+      background: transparent; color: var(--color-accent);
+      border: 1.5px solid rgba(var(--color-accent-rgb), 0.5);
+    }
+    .btn-outline:hover { background: rgba(var(--color-accent-rgb), 0.08); }
+    .btn-ghost {
+      background: transparent; color: var(--color-text-muted);
+      border: none; padding: 14px 20px;
+    }
+    .btn-ghost:hover { color: var(--color-text); }
+    .btn-lg  { padding: 16px 36px; font-size: 1rem; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn-white {
+      background: #fff; color: var(--color-accent);
+      font-family: var(--font-body); font-weight: 700;
+      padding: 16px 40px; border-radius: var(--radius-md);
+      font-size: 1rem; border: none; cursor: pointer;
+      transition: opacity 150ms; display: inline-block;
+    }
+    .btn-white:hover { opacity: 0.92; transform: translateY(-1px); }
+
+    /* ══════════════════════════════════════════
+       ANIMACIONES — Progressive Enhancement
+    ══════════════════════════════════════════ */
+    [data-reveal] { }
+    .js [data-reveal]           { opacity: 0; transform: translateY(28px); will-change: opacity, transform; }
+    .js [data-reveal="left"]    { transform: translateX(-32px); opacity: 0; }
+    .js [data-reveal="right"]   { transform: translateX(32px); opacity: 0; }
+    .js [data-reveal].is-visible {
+      opacity: 1; transform: none;
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      [data-reveal] { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ══════════════════════════════════════════
+       HEADER / NAV
+    ══════════════════════════════════════════ */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 clamp(16px, 3vw, 32px);
+      transition: background 300ms ease, border-color 300ms ease, backdrop-filter 300ms ease;
+    }
+    .site-header.scrolled {
+      background: rgba(8,8,9,0.94);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .nav-inner {
+      width: min(1280px, 100%); margin: 0 auto;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
+      color: var(--color-text); letter-spacing: -0.01em;
+    }
+    .nav-brand span { color: var(--color-accent); }
+    .nav-links {
+      display: flex; gap: 2px; list-style: none;
+    }
+    .nav-links a {
+      padding: 8px 14px; border-radius: var(--radius-md);
+      font-size: var(--text-small); font-weight: 500;
+      color: var(--color-text-muted);
+      transition: color 150ms, background 150ms;
+    }
+    .nav-links a:hover { color: var(--color-text); background: var(--color-surface); }
+    .nav-cta { display: flex; align-items: center; gap: 8px; }
+    .btn-nav {
+      font-family: var(--font-body); font-weight: 600; font-size: 0.875rem;
+      padding: 9px 20px; border-radius: var(--radius-md); cursor: pointer;
+      transition: opacity 150ms, background 150ms;
+    }
+    .btn-nav-ghost {
+      background: transparent; color: var(--color-text-muted); border: none;
+    }
+    .btn-nav-ghost:hover { color: var(--color-text); }
+    .btn-nav-primary {
+      background: var(--color-accent); color: #fff; border: none;
+    }
+    .btn-nav-primary:hover { opacity: 0.88; }
+
+    /* Mobile: hamburger */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 6px; background: none; border: none;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--color-text-muted); border-radius: 2px;
+      transition: all 200ms;
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+    }
+
+    /* ══════════════════════════════════════════
+       S1 — HERO
+    ══════════════════════════════════════════ */
+    .hero {
+      background: var(--color-bg-dark);
+      min-height: 100svh;
+      display: flex; align-items: center;
+      padding: clamp(100px, 12vw, 140px) 0 clamp(64px, 8vw, 100px);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Sutil grid de fondo estilo japonés-tech */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 58fr 42fr;
+      gap: clamp(40px, 5vw, 80px);
+      align-items: center;
+      position: relative;
+    }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--text-hero);
+      font-weight: 800;
+      line-height: 0.93;
+      letter-spacing: -0.04em;
+      color: var(--color-text-on-dark);
+      margin-bottom: 24px;
+      text-wrap: balance;
+    }
+    .hero-title em { color: var(--color-accent); font-style: normal; }
+
+    .hero-lead {
+      font-size: var(--text-lead);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      max-width: 50ch;
+      margin-bottom: 40px;
+    }
+
+    /* Visual panel */
+    .hero-visual {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      position: relative;
+    }
+    .hero-visual-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+    }
+    .hero-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .hero-dot:nth-child(1) { background: #C9382A; }
+    .hero-dot:nth-child(2) { background: rgba(255,255,255,0.15); }
+    .hero-dot:nth-child(3) { background: rgba(255,255,255,0.08); }
+    .hero-panel-title {
+      font-family: var(--font-mono); font-size: 0.6875rem;
+      color: var(--color-text-muted); letter-spacing: 0.06em; text-transform: uppercase;
+      margin-left: auto;
+    }
+    .hero-status-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--color-bg-dark);
+      border-radius: var(--radius-md);
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .hero-status-row:last-child { margin-bottom: 0; }
+    .status-label { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); }
+    .status-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 700;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-dot--green { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+    .status-dot--red   { background: var(--color-accent); box-shadow: 0 0 6px rgba(var(--color-accent-rgb), 0.5); }
+    .uptime-bar { margin-top: 20px; }
+    .uptime-label { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .uptime-label span { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); }
+    .uptime-label strong { font-family: var(--font-display); font-weight: 800; color: var(--color-text); font-size: 0.9rem; }
+    .uptime-track {
+      height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;
+    }
+    .uptime-fill {
+      height: 100%; width: 99.9%; background: var(--color-accent); border-radius: 2px;
+    }
+    @media (max-width: 900px) { .hero-visual { display: none; } }
+
+    /* ══════════════════════════════════════════
+       S2 — SOCIAL PROOF / LOGOS
+    ══════════════════════════════════════════ */
+    .logos-section {
+      background: var(--color-bg-dark);
+      padding: clamp(28px, 4vw, 44px) 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .logos-header {
+      text-align: center; margin-bottom: 28px;
+    }
+    .logos-row {
+      display: flex; align-items: center; justify-content: center;
+      flex-wrap: wrap; gap: clamp(20px, 4vw, 48px);
+    }
+    .logo-item {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+      color: var(--color-text-muted); opacity: 0.38;
+      letter-spacing: -0.01em;
+      transition: opacity 200ms;
+    }
+    .logo-item:hover { opacity: 0.65; }
+
+    /* ══════════════════════════════════════════
+       S3 — SERVICIOS
+    ══════════════════════════════════════════ */
+    .servicios { background: var(--color-bg-subtle); }
+    .section-header { margin-bottom: 52px; }
+    .section-header h2 { color: var(--color-text); margin-bottom: 12px; }
+    .section-header .lead {
+      font-size: var(--text-lead); color: var(--color-text-muted);
+      line-height: 1.7; max-width: 50ch;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 900px) { .cards-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 600px) and (max-width: 900px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .card-tech {
+      background: var(--color-surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-top: 2px solid var(--color-accent);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      padding: 32px;
+      transition: border-color 200ms ease;
+    }
+    .card-tech:hover { border-color: rgba(var(--color-accent-rgb), 0.5); }
+    .card-icon {
+      width: 44px; height: 44px;
+      background: rgba(var(--color-accent-rgb), 0.10);
+      border: 1px solid rgba(var(--color-accent-rgb), 0.20);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .card-kicker {
+      font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--color-accent); margin-bottom: 10px; display: block;
+    }
+    .card-tech h3 { color: var(--color-text); margin-bottom: 10px; font-size: 1.125rem; }
+    .card-tech p {
+      font-size: var(--text-small); color: var(--color-text-muted);
+      line-height: 1.65; max-width: none;
+    }
+
+    /* ══════════════════════════════════════════
+       S4 — CÓMO FUNCIONA
+    ══════════════════════════════════════════ */
+    .como-funciona { background: var(--color-bg); }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
+    .step {
+      padding: 40px 32px;
+      border-left: 1px solid rgba(255,255,255,0.06);
+    }
+    .step:first-child { border-left: none; }
+    @media (max-width: 768px) {
+      .step { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 0; }
+      .step:first-child { border-top: none; }
+    }
+    .step-number {
+      font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 700;
+      color: var(--color-accent); letter-spacing: 0.08em;
+      margin-bottom: 16px; display: block;
+    }
+    .step-divider {
+      width: 32px; height: 2px;
+      background: var(--color-accent); margin-bottom: 20px;
+    }
+    .step h3 { color: var(--color-text); margin-bottom: 12px; font-size: 1.125rem; }
+    .step p {
+      color: var(--color-text-muted); font-size: var(--text-small);
+      line-height: 1.65; max-width: none;
+    }
+
+    /* ══════════════════════════════════════════
+       S5 — STATS
+    ══════════════════════════════════════════ */
+    .stats-section {
+      background: var(--color-bg-dark);
+      padding: clamp(48px, 6vw, 80px) 0;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat {
+      padding: 32px;
+      border-left: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat:first-child { border-left: none; }
+    @media (max-width: 768px) {
+      .stat:nth-child(odd)  { border-left: none; }
+      .stat { border-top: 1px solid rgba(255,255,255,0.06); }
+      .stat:nth-child(1), .stat:nth-child(2) { border-top: none; }
+    }
+    .stat-number {
+      font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800; color: var(--color-text);
+      font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: -0.03em;
+    }
+    .stat-number em { color: var(--color-accent); font-style: normal; }
+    .stat-label {
+      font-family: var(--font-mono); font-size: var(--text-label);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--color-text-muted); margin-top: 10px; display: block;
+    }
+
+    /* ══════════════════════════════════════════
+       S6 — POR QUÉ TECH TECNIC
+    ══════════════════════════════════════════ */
+    .por-que { background: var(--color-bg-subtle); }
+    .por-que-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: start; margin-top: 52px;
+    }
+    @media (max-width: 768px) { .por-que-grid { grid-template-columns: 1fr; } }
+    .por-que-col { display: flex; flex-direction: column; gap: 0; }
+    .benefit-item {
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .benefit-item:last-child { border-bottom: none; }
+    .benefit-item h4 { color: var(--color-text); margin-bottom: 8px; }
+    .benefit-item p {
+      color: var(--color-text-muted); font-size: var(--text-small);
+      line-height: 1.65; max-width: none;
+    }
+    .benefit-check {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .benefit-check::before {
+      content: '';
+      display: block; width: 16px; height: 16px;
+      background: rgba(var(--color-accent-rgb), 0.15);
+      border: 1px solid rgba(var(--color-accent-rgb), 0.35);
+      border-radius: 3px;
+      flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M1.5 5l2.5 2.5 4.5-4.5' stroke='%23C9382A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* ══════════════════════════════════════════
+       S7 — TESTIMONIALS
+    ══════════════════════════════════════════ */
+    .testimonials { background: var(--color-bg); }
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 20px; margin-top: 52px;
+    }
+    @media (max-width: 768px) { .testimonials-grid { grid-template-columns: 1fr; } }
+    .testimonial-card {
+      background: var(--color-surface);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .testimonial-stars {
+      display: flex; gap: 3px; margin-bottom: 20px;
+    }
+    .star { color: var(--color-accent); font-size: 0.875rem; }
+    .testimonial-quote {
+      font-size: var(--text-lead); color: var(--color-text);
+      line-height: 1.7; margin-bottom: 28px; max-width: none;
+    }
+    .testimonial-quote::before {
+      content: '\201C';
+      color: var(--color-accent); font-family: var(--font-display);
+      font-size: 2.5rem; line-height: 0; vertical-align: -0.5em; margin-right: 4px;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--color-surface-2);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 0.875rem; color: var(--color-accent); flex-shrink: 0;
+    }
+    .author-name  { font-weight: 600; font-size: var(--text-small); color: var(--color-text); }
+    .author-role  { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); margin-top: 2px; }
+    /* Tercero — ocupa fila completa */
+    .testimonial-card--wide {
+      grid-column: span 2;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 32px; align-items: center;
+    }
+    @media (max-width: 768px) { .testimonial-card--wide { grid-column: span 1; grid-template-columns: 1fr; } }
+
+    /* ══════════════════════════════════════════
+       S8 — FAQ
+    ══════════════════════════════════════════ */
+    .faq-section { background: var(--color-bg-subtle); }
+    .faq-inner {
+      display: grid; grid-template-columns: 38fr 62fr;
+      gap: clamp(40px, 5vw, 80px); align-items: start; margin-top: 0;
+    }
+    @media (max-width: 768px) { .faq-inner { grid-template-columns: 1fr; } }
+    .faq-left h2 { color: var(--color-text); margin-bottom: 16px; }
+    .faq-left p  { color: var(--color-text-muted); font-size: var(--text-small); line-height: 1.65; max-width: 34ch; }
+    .faq-left .btn-outline { margin-top: 28px; }
+
+    .faq-list { display: flex; flex-direction: column; gap: 0; }
+    details.faq-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    details.faq-item:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+    details.faq-item summary {
+      padding: 22px 0;
+      font-family: var(--font-body); font-weight: 600; font-size: var(--text-h4);
+      color: var(--color-text); cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    }
+    details.faq-item summary::-webkit-details-marker { display: none; }
+    details.faq-item summary::after {
+      content: '+'; color: var(--color-accent);
+      font-family: var(--font-display); font-size: 1.5rem;
+      flex-shrink: 0; transition: transform 250ms ease;
+      width: 24px; text-align: center;
+    }
+    details.faq-item[open] summary::after { transform: rotate(45deg); }
+    details.faq-item .faq-answer {
+      padding: 0 0 22px;
+      color: var(--color-text-muted); font-size: var(--text-body);
+      line-height: 1.7; max-width: 68ch;
+    }
+
+    /* ══════════════════════════════════════════
+       S9 — CTA FINAL
+    ══════════════════════════════════════════ */
+    .cta-final { background: var(--color-bg); padding: clamp(64px, 8vw, 100px) 0; }
+    .cta-box {
+      background: var(--color-accent);
+      border-radius: var(--radius-xl);
+      padding: clamp(48px, 7vw, 88px) clamp(32px, 5vw, 80px);
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    /* Sutil patrón japonés en el CTA */
+    .cta-box::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    .cta-box > * { position: relative; }
+    .cta-box h2 {
+      color: #fff; font-size: var(--text-h2);
+      margin-bottom: 16px; max-width: 22ch; margin-left: auto; margin-right: auto;
+    }
+    .cta-box p {
+      color: rgba(255,255,255,0.80); max-width: 46ch;
+      margin: 0 auto 36px; font-size: var(--text-lead); line-height: 1.65;
+    }
+    .cta-note {
+      margin-top: 16px;
+      font-family: var(--font-mono); font-size: 0.6875rem;
+      color: rgba(255,255,255,0.55); letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════ */
+    .site-footer {
+      background: var(--color-bg-dark);
+      padding: clamp(48px, 6vw, 72px) 0 clamp(24px, 3vw, 40px);
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr;
+      gap: 40px; margin-bottom: 48px;
+    }
+    @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 540px)  { .footer-grid { grid-template-columns: 1fr; } }
+    .footer-brand {
+      font-family: var(--font-display); font-weight: 800;
+      font-size: 1.15rem; color: var(--color-text); margin-bottom: 12px;
+    }
+    .footer-brand span { color: var(--color-accent); }
+    .footer-desc { font-size: var(--text-small); color: var(--color-text-muted); max-width: 28ch; margin-bottom: 24px; line-height: 1.65; }
+    .footer-col-title {
+      font-family: var(--font-mono); font-size: var(--text-kicker);
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.10em;
+      color: var(--color-text-muted); margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: var(--text-small); color: var(--color-text-muted); transition: color 150ms; }
+    .footer-links a:hover { color: var(--color-text); }
+    .footer-bottom {
+      padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); }
+    .footer-links-inline { display: flex; gap: 20px; }
+    .footer-links-inline a { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); transition: color 150ms; }
+    .footer-links-inline a:hover { color: var(--color-text); }
+
+    /* ══════════════════════════════════════════
+       SCROLL TO TOP (sutil, japonés)
+    ══════════════════════════════════════════ */
+    .scroll-top {
+      position: fixed; bottom: 28px; right: 28px; z-index: 50;
+      width: 40px; height: 40px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; transition: opacity 200ms, transform 200ms;
+      pointer-events: none;
+    }
+    .scroll-top.visible { opacity: 1; pointer-events: all; }
+    .scroll-top:hover { transform: translateY(-2px); }
+    .scroll-top svg { color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════
+     HEADER / NAV
+════════════════ -->
+<header class="site-header" id="site-header">
+  <nav class="nav-inner">
+    <a href="/" class="nav-brand">Tech<span>Tecnic</span></a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#por-que">Por qué nosotros</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <div class="nav-cta">
+      <button class="btn-nav btn-nav-ghost">Clientes</button>
+      <button class="btn-nav btn-nav-primary">Hablar con soporte</button>
+    </div>
+    <button class="nav-hamburger" aria-label="Menú" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ════════════════
+     S1 — HERO
+════════════════ -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+
+      <!-- Columna izquierda -->
+      <div class="wg-hero-content" id="hero-content">
+        <span class="kicker">Soporte · Infraestructura · Seguridad</span>
+        <h1 class="hero-title">
+          Tu empresa no puede<br>
+          permitirse <em>fallar.</em>
+        </h1>
+        <p class="hero-lead">
+          Tech Tecnic mantiene tu infraestructura tecnológica operando al 100%.
+          Monitoreo proactivo, seguridad activa y respuesta garantizada
+          en menos de 15 minutos — los 365 días del año.
+        </p>
+        <div class="btn-row">
+          <a href="#contacto" class="btn btn-primary btn-lg">Hablar con un técnico</a>
+          <a href="#casos" class="btn btn-ghost btn-lg">Ver casos de éxito →</a>
+        </div>
+      </div>
+
+      <!-- Columna derecha — Panel de monitoreo simulado -->
+      <div class="hero-visual" data-reveal="right">
+        <div class="hero-visual-header">
+          <div class="hero-dot"></div>
+          <div class="hero-dot"></div>
+          <div class="hero-dot"></div>
+          <span class="hero-panel-title">Monitor · Live</span>
+        </div>
+        <div class="hero-status-row">
+          <span class="status-label">API Gateway</span>
+          <span class="status-badge"><span class="status-dot status-dot--green"></span><span style="color:#4ade80">Operativo</span></span>
+        </div>
+        <div class="hero-status-row">
+          <span class="status-label">Base de datos principal</span>
+          <span class="status-badge"><span class="status-dot status-dot--green"></span><span style="color:#4ade80">Operativo</span></span>
+        </div>
+        <div class="hero-status-row">
+          <span class="status-label">CDN / Edge</span>
+          <span class="status-badge"><span class="status-dot status-dot--green"></span><span style="color:#4ade80">Operativo</span></span>
+        </div>
+        <div class="hero-status-row">
+          <span class="status-label">Certificados SSL</span>
+          <span class="status-badge"><span class="status-dot status-dot--green"></span><span style="color:#4ade80">Válidos · 89 días</span></span>
+        </div>
+        <div class="hero-status-row">
+          <span class="status-label">Backup nocturno</span>
+          <span class="status-badge"><span class="status-dot status-dot--green"></span><span style="color:#4ade80">Completado · 02:14</span></span>
+        </div>
+        <div class="uptime-bar">
+          <div class="uptime-label">
+            <span>Uptime últimos 90 días</span>
+            <strong>99.97%</strong>
+          </div>
+          <div class="uptime-track"><div class="uptime-fill"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S2 — LOGOS
+════════════════ -->
+<section class="logos-section">
+  <div class="container">
+    <div class="logos-header">
+      <span class="kicker kicker--neutral">Confían en nosotros</span>
+    </div>
+    <div class="logos-row">
+      <span class="logo-item">FinMéxico</span>
+      <span class="logo-item">CloudRetail</span>
+      <span class="logo-item">NovaSaaS</span>
+      <span class="logo-item">DataCorp</span>
+      <span class="logo-item">Logística360</span>
+      <span class="logo-item">MedTech CO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S3 — SERVICIOS
+════════════════ -->
+<section class="servicios section" id="servicios">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="kicker">Servicios</span>
+      <h2>Todo lo que tu infraestructura necesita</h2>
+      <p class="lead">Un solo equipo. Todos los frentes cubiertos. Sin proveedores intermediarios.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card-tech" data-reveal>
+        <div class="card-icon">⚡</div>
+        <span class="card-kicker">Monitoreo</span>
+        <h3>Alertas antes de que fallen</h3>
+        <p>Supervisión continua de servidores, servicios y aplicaciones. Detectamos y resolvemos anomalías antes de que impacten a tus usuarios.</p>
+      </div>
+      <div class="card-tech" data-reveal>
+        <div class="card-icon">🛡️</div>
+        <span class="card-kicker">Seguridad</span>
+        <h3>Protección sin pausas</h3>
+        <p>Análisis de vulnerabilidades, parcheo automatizado y respuesta a incidentes en tiempo real. Tu superficie de ataque, siempre bajo control.</p>
+      </div>
+      <div class="card-tech" data-reveal>
+        <div class="card-icon">☁️</div>
+        <span class="card-kicker">Cloud</span>
+        <h3>Infraestructura que escala</h3>
+        <p>Diseño, migración y gestión en AWS, Azure y GCP. Optimización de costos incluida. Cero lock-in, máxima disponibilidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S4 — CÓMO FUNCIONA
+════════════════ -->
+<section class="como-funciona section" id="como-funciona">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="kicker">Metodología</span>
+      <h2>Empezar es simple. Quedarse es la decisión correcta.</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step" data-reveal>
+        <span class="step-number">01</span>
+        <div class="step-divider"></div>
+        <h3>Auditoría técnica sin costo</h3>
+        <p>Analizamos tu infraestructura actual, identificamos riesgos y te entregamos un informe detallado. Sin compromiso, sin letra chica.</p>
+      </div>
+      <div class="step" data-reveal>
+        <span class="step-number">02</span>
+        <div class="step-divider"></div>
+        <h3>Plan a tu medida</h3>
+        <p>Diseñamos el esquema de soporte y monitoreo según tu stack, tamaño de equipo y criticidad de servicios.</p>
+      </div>
+      <div class="step" data-reveal>
+        <span class="step-number">03</span>
+        <div class="step-divider"></div>
+        <h3>Operación inmediata</h3>
+        <p>En menos de 48 horas tu infraestructura está cubierta. Nuestro equipo toma el control — tú retomas el foco en tu negocio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S5 — STATS
+════════════════ -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat" data-reveal>
+        <div class="stat-number"><em>99.9</em>%</div>
+        <span class="stat-label">Uptime promedio</span>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat-number">+250</div>
+        <span class="stat-label">Clientes activos</span>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat-number"><em>&lt;15</em>min</div>
+        <span class="stat-label">Tiempo de respuesta</span>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat-number">12</div>
+        <span class="stat-label">Años en operación</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S6 — POR QUÉ
+════════════════ -->
+<section class="por-que section" id="por-que">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="kicker">Por qué nosotros</span>
+      <h2>No somos un proveedor.<br>Somos tu equipo técnico.</h2>
+      <p class="lead">La diferencia entre el soporte reactivo y el soporte que previene.</p>
+    </div>
+    <div class="por-que-grid">
+      <div class="por-que-col">
+        <div class="benefit-item" data-reveal>
+          <div class="benefit-check"></div>
+          <h4>Respuesta en menos de 15 minutos</h4>
+          <p>SLA garantizado por contrato. Si no respondemos en tiempo, hay penalización. Sin excusas.</p>
+        </div>
+        <div class="benefit-item" data-reveal>
+          <div class="benefit-check"></div>
+          <h4>Equipo senior asignado</h4>
+          <p>No hay juniors en guardia. Cada cliente tiene ingenieros certificados que conocen su stack.</p>
+        </div>
+      </div>
+      <div class="por-que-col">
+        <div class="benefit-item" data-reveal>
+          <div class="benefit-check"></div>
+          <h4>Monitoreo antes que el usuario note el problema</h4>
+          <p>El 94% de las incidencias las resolvemos antes de que generen un ticket de soporte.</p>
+        </div>
+        <div class="benefit-item" data-reveal>
+          <div class="benefit-check"></div>
+          <h4>Transparencia total</h4>
+          <p>Dashboard en tiempo real, reportes mensuales y acceso a logs. Sin cajas negras.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S7 — TESTIMONIALS
+════════════════ -->
+<section class="testimonials section" id="testimonials">
+  <div class="container">
+    <div class="section-header" data-reveal>
+      <span class="kicker">Clientes</span>
+      <h2>Lo que dicen quienes ya no se preocupan por su infraestructura</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" data-reveal>
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-quote">Antes perdíamos horas cada semana en incidencias. Desde que trabajamos con Tech Tecnic, nuestra infraestructura simplemente funciona. El equipo responde antes de que nos demos cuenta del problema.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div>
+            <div class="author-name">Miguel Ríos</div>
+            <div class="author-role">CTO · Fintech MX</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card" data-reveal>
+        <div class="testimonial-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="testimonial-quote">Migramos 40 servidores a la nube en 72 horas sin un solo minuto de downtime. No pensé que fuera posible hasta que lo vimos con nuestros propios ojos.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">AC</div>
+          <div>
+            <div class="author-name">Andrea Castillo</div>
+            <div class="author-role">Directora de Operaciones · E-commerce Colombia</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card testimonial-card--wide" data-reveal>
+        <div>
+          <div class="testimonial-stars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+          <p class="testimonial-quote">El equipo de Tech Tecnic detectó una vulnerabilidad crítica en nuestros sistemas antes de que pudiera ser explotada. Ese solo evento pagó 3 años de contrato.</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">RV</div>
+          <div>
+            <div class="author-name">Roberto Vega</div>
+            <div class="author-role">CEO · SaaS B2B LATAM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S8 — FAQ
+════════════════ -->
+<section class="faq-section section" id="faq">
+  <div class="container">
+    <div class="faq-inner">
+      <div class="faq-left" data-reveal="left">
+        <span class="kicker">FAQ</span>
+        <h2>Preguntas frecuentes</h2>
+        <p>Si tu pregunta no está aquí, habla directamente con un ingeniero — sin filtros de ventas.</p>
+        <a href="#contacto" class="btn btn-outline" style="margin-top:28px;display:inline-flex">Contactar ahora →</a>
+      </div>
+      <div class="faq-list" data-reveal="right">
+        <details class="faq-item" open>
+          <summary>¿Cuánto tiempo tarda en responder el equipo ante una incidencia?</summary>
+          <p class="faq-answer">Garantizamos respuesta inicial en menos de 15 minutos por contrato. El tiempo de resolución depende de la complejidad de la incidencia, pero el 78% se resuelve en la primera hora. Nuestro SLA incluye penalizaciones si no cumplimos los tiempos pactados.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Trabajan con todo tipo de infraestructura o solo con ciertos stacks?</summary>
+          <p class="faq-answer">Trabajamos con la mayoría de stacks empresariales: Linux/Windows Server, AWS, Azure, GCP, VMware, Docker, Kubernetes, bases de datos relacionales y NoSQL. En la auditoría inicial evaluamos tu entorno específico.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Necesito cancelar mi equipo interno de TI para contratar Tech Tecnic?</summary>
+          <p class="faq-answer">No necesariamente. Muchos clientes nos contratan como extensión de su equipo interno, cubriendo guardia nocturna, soporte especializado o proyectos específicos. Diseñamos el esquema según tu estructura.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo funciona la auditoría inicial gratuita?</summary>
+          <p class="faq-answer">Es una revisión técnica de 2–3 horas donde analizamos tu arquitectura, configuraciones de seguridad, procesos de backup y tiempos de respuesta actuales. Te entregamos un informe detallado con hallazgos y recomendaciones, sin compromiso de contratación.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Operan en toda LATAM o solo en ciertos países?</summary>
+          <p class="faq-answer">Operamos de forma remota en toda LATAM y tenemos presencia física en México, Colombia y Argentina. El 95% de las incidencias se resuelven de forma remota; para casos que requieren presencia on-site coordinamos con socios locales certificados.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     S9 — CTA FINAL
+════════════════ -->
+<section class="cta-final" id="contacto">
+  <div class="container">
+    <div class="cta-box" data-reveal>
+      <h2>¿Tu infraestructura está lista para lo que viene?</h2>
+      <p>Habla con un ingeniero hoy. Sin compromiso, sin presentaciones de ventas — solo una conversación técnica honesta sobre tu situación actual.</p>
+      <a href="mailto:hola@techtecnic.com" class="btn-white">Agendar revisión gratuita</a>
+      <p class="cta-note">Sin costo · Sin compromiso · Respuesta en &lt;24h</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════
+     FOOTER
+════════════════ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Tech<span>Tecnic</span></div>
+        <p class="footer-desc">Infraestructura tecnológica crítica para empresas que no pueden permitirse fallar.</p>
+        <div class="btn-row" style="gap:8px">
+          <a href="#" class="btn" style="background:var(--color-surface);color:var(--color-text-muted);border:1px solid var(--color-border-strong);padding:8px 16px;font-size:0.8rem">LinkedIn</a>
+          <a href="#" class="btn" style="background:var(--color-surface);color:var(--color-text-muted);border:1px solid var(--color-border-strong);padding:8px 16px;font-size:0.8rem">Twitter/X</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Servicios</p>
+        <ul class="footer-links">
+          <li><a href="#">Monitoreo 24/7</a></li>
+          <li><a href="#">Seguridad activa</a></li>
+          <li><a href="#">Cloud management</a></li>
+          <li><a href="#">Soporte técnico</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Empresa</p>
+        <ul class="footer-links">
+          <li><a href="#">Nosotros</a></li>
+          <li><a href="#">Equipo</a></li>
+          <li><a href="#">Casos de éxito</a></li>
+          <li><a href="#">Blog técnico</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Contacto</p>
+        <ul class="footer-links">
+          <li><a href="mailto:hola@techtecnic.com">hola@techtecnic.com</a></li>
+          <li><a href="tel:+525500000000">+52 55 0000 0000</a></li>
+          <li><a href="#">Status page</a></li>
+          <li><a href="#">SLA & Políticas</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Tech Tecnic. Todos los derechos reservados.</span>
+      <div class="footer-links-inline">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" aria-label="Volver arriba">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 12V4M4 7l4-4 4 4"/>
+  </svg>
+</button>
+
+<!-- Schema.org JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://techtecnic.com/#webpage",
+      "name": "Soporte Técnico Empresarial · Tech Tecnic",
+      "url": "https://techtecnic.com/",
+      "description": "Tech Tecnic mantiene tu infraestructura tecnológica operando al 100%. Monitoreo proactivo, seguridad activa y respuesta en menos de 15 minutos.",
+      "inLanguage": "es"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://techtecnic.com/#organization",
+      "name": "Tech Tecnic",
+      "url": "https://techtecnic.com/",
+      "description": "Tech Tecnic es una empresa de soporte técnico e infraestructura tecnológica especializada en alta disponibilidad, que ayuda a empresas de LATAM a operar sin interrupciones.",
+      "areaServed": ["MX","CO","AR","PE","CL"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"¿Cuánto tiempo tarda en responder el equipo ante una incidencia?","acceptedAnswer":{"@type":"Answer","text":"Garantizamos respuesta inicial en menos de 15 minutos por contrato. El 78% de las incidencias se resuelven en la primera hora."}},
+        {"@type":"Question","name":"¿Trabajan con todo tipo de infraestructura?","acceptedAnswer":{"@type":"Answer","text":"Trabajamos con Linux/Windows Server, AWS, Azure, GCP, VMware, Docker, Kubernetes y bases de datos relacionales y NoSQL."}},
+        {"@type":"Question","name":"¿Necesito cancelar mi equipo interno de TI?","acceptedAnswer":{"@type":"Answer","text":"No. Muchos clientes nos contratan como extensión de su equipo interno, cubriendo guardia nocturna o soporte especializado."}},
+        {"@type":"Question","name":"¿Cómo funciona la auditoría inicial gratuita?","acceptedAnswer":{"@type":"Answer","text":"Es una revisión técnica de 2–3 horas. Te entregamos un informe detallado con hallazgos y recomendaciones, sin compromiso."}},
+        {"@type":"Question","name":"¿Operan en toda LATAM?","acceptedAnswer":{"@type":"Answer","text":"Operamos de forma remota en toda LATAM con presencia física en México, Colombia y Argentina."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  document.documentElement.classList.add('js');
+
+  window.addEventListener('DOMContentLoaded', () => {
+
+    // ── GSAP + Lenis ──────────────────────────
+    if (typeof gsap !== 'undefined' && typeof Lenis !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({ lerp: 0.1 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      // Hero entrance
+      const heroContent = document.getElementById('hero-content');
+      if (heroContent) {
+        gsap.fromTo(
+          [...heroContent.children],
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, stagger: 0.13, duration: 0.9, ease: 'power3.out', delay: 0.1 }
+        );
+      }
+
+      // Scroll reveal
+      gsap.utils.toArray('[data-reveal]').forEach(el => {
+        const dir = el.dataset.reveal;
+        gsap.fromTo(el,
+          { opacity: 0, y: dir && dir !== 'up' ? 0 : 28, x: dir === 'left' ? -32 : dir === 'right' ? 32 : 0 },
+          { opacity: 1, y: 0, x: 0, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 86%', once: true } }
+        );
+      });
+
+      // Stagger cards
+      gsap.utils.toArray('.cards-grid, .steps-grid, .stats-grid, .testimonials-grid').forEach(parent => {
+        const items = parent.querySelectorAll('.card-tech, .step, .stat, .testimonial-card');
+        if (items.length < 2) return;
+        gsap.fromTo(items,
+          { opacity: 0, y: 36 },
+          { opacity: 1, y: 0, stagger: 0.09, duration: 0.7, ease: 'power2.out',
+            scrollTrigger: { trigger: parent, start: 'top 82%', once: true } }
+        );
+      });
+    }
+
+    // ── Header scroll ─────────────────────────
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ── Scroll to top ─────────────────────────
+    const scrollTopBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+    }, { passive: true });
+    scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  });
+</script>
+</body>
+</html>

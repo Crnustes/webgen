@@ -1,0 +1,353 @@
+<main>
+
+  <section>
+    <span>Transformamos ideas en experiencias digitales</span>
+
+    <h1>
+      Impulsamos tu <br>
+      presencia digital
+    </h1>
+
+    <p>
+      Desarrollo web de última generación, inteligencia artificial y automatización
+      para marcas que quieren destacar en el mundo digital.
+    </p>
+
+    <div>
+      <a href="#">Iniciar proyecto</a>
+      <a href="#">Explorar servicios</a>
+    </div>
+
+    <div>
+      <article>
+        <strong>50+</strong>
+        <span>Proyectos completados</span>
+      </article>
+
+      <article>
+        <strong>98%</strong>
+        <span>Satisfacción de clientes</span>
+      </article>
+
+      <article>
+        <strong>5 estrellas</strong>
+        <span>Calificación promedio</span>
+      </article>
+
+      <article>
+        <strong>24/7</strong>
+        <span>Soporte técnico</span>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <span>Nuestros servicios</span>
+
+    <h2>
+      Soluciones digitales <br>
+      creadas para ti
+    </h2>
+
+    <p>
+      Convertimos ideas en experiencias digitales que generan resultados reales
+    </p>
+
+    <div>
+
+      <article>
+        <h3>Desarrollo Web</h3>
+        <p>Sitios modernos y escalables</p>
+      </article>
+
+      <article>
+        <h3>SEO y Posicionamiento</h3>
+        <p>Visibilidad que convierte</p>
+      </article>
+
+      <article>
+        <h3>IA y Automatización</h3>
+        <p>Inteligencia que trabaja por ti</p>
+      </article>
+
+      <article>
+        <h3>Integraciones</h3>
+        <p>Todo conectado</p>
+      </article>
+
+      <article>
+        <h3>Mantenimiento Web</h3>
+        <p>Tu sitio siempre actualizado</p>
+      </article>
+
+      <article>
+        <h3>Aplicaciones Móviles</h3>
+        <p>Experiencias móviles premium</p>
+      </article>
+
+      <article>
+        <h3>Chatbots con IA para WhatsApp</h3>
+        <p>Automatización inteligente 24/7</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <span>Portafolio</span>
+
+    <h2>Casos de éxito</h2>
+
+    <p>
+      Proyectos que convierten ideas en experiencias digitales exitosas
+    </p>
+
+    <div>
+
+      <article>
+        <span>E-commerce</span>
+
+        <h3>Yoica.com</h3>
+
+        <p>
+          Plataforma de productos naturales enfocada en bienestar,
+          diseño limpio y conversiones optimizadas.
+        </p>
+
+        <ul>
+          <li>WordPress</li>
+          <li>WooCommerce</li>
+          <li>SEO</li>
+        </ul>
+
+        <a href="#">Ver proyecto</a>
+      </article>
+
+      <article>
+        <span>Web App</span>
+
+        <h3>WooCar.io</h3>
+
+        <p>
+          Aplicación web para alquiler de vehículos eléctricos,
+          conectada a API y backend personalizado.
+        </p>
+
+        <ul>
+          <li>React</li>
+          <li>API</li>
+          <li>Backend</li>
+        </ul>
+
+        <a href="#">Ver proyecto</a>
+      </article>
+
+      <article>
+        <span>Corporativo</span>
+
+        <h3>KLDiseoYConstruccion.com</h3>
+
+        <p>
+          Sitio corporativo de arquitectura enfocado en estética,
+          velocidad y posicionamiento SEO.
+        </p>
+
+        <ul>
+          <li>Corporativo</li>
+          <li>SEO</li>
+          <li>Diseño</li>
+        </ul>
+
+        <a href="#">Ver proyecto</a>
+      </article>
+
+    </div>
+
+    <a href="#">Iniciar mi proyecto</a>
+  </section>
+
+  <section>
+    <span>Nuestro proceso</span>
+
+    <h2>Cómo trabajamos</h2>
+
+    <p>
+      Un proceso probado que entrega resultados excepcionales en cada proyecto
+    </p>
+
+    <div>
+
+      <article>
+        <span>01</span>
+        <small>1-2 días</small>
+
+        <h3>Descubrimiento</h3>
+
+        <h4>Entendemos tu visión</h4>
+
+        <p>
+          Nos reunimos para conocer tus objetivos,
+          audiencia y expectativas. Analizamos tu competencia
+          y definimos una estrategia clara.
+        </p>
+      </article>
+
+      <article>
+        <span>02</span>
+        <small>3-5 días</small>
+
+        <h3>Diseño</h3>
+
+        <h4>Creamos la experiencia</h4>
+
+        <p>
+          Diseñamos interfaces modernas y funcionales,
+          priorizando usabilidad, conversión y experiencia de usuario.
+        </p>
+      </article>
+
+      <article>
+        <span>03</span>
+        <small>1-3 semanas</small>
+
+        <h3>Desarrollo</h3>
+
+        <h4>Construimos con calidad</h4>
+
+        <p>
+          Desarrollamos tu proyecto con tecnologías modernas,
+          código limpio y optimización de rendimiento y SEO.
+        </p>
+      </article>
+
+    </div>
+
+    <a href="#">Comenzar ahora</a>
+  </section>
+
+  <section>
+    <span>Planes y precios</span>
+
+    <h2>
+      Planes que <br>
+      crecen contigo
+    </h2>
+
+    <p>
+      Elige el plan perfecto para tu proyecto.
+      Todos incluyen soporte profesional y garantía de calidad.
+    </p>
+
+    <div>
+
+      <article>
+        <h3>Starter</h3>
+
+        <p>Perfecto para comenzar</p>
+
+        <strong>$102 USD</strong>
+
+        <ul>
+          <li>Landing page moderna</li>
+          <li>Dominio, hosting y SSL</li>
+          <li>Diseño responsive</li>
+          <li>SEO básico</li>
+        </ul>
+
+        <a href="#">Comenzar</a>
+      </article>
+
+      <article>
+        <span>Más popular</span>
+
+        <h3>Professional</h3>
+
+        <p>El más elegido</p>
+
+        <strong>$230 USD</strong>
+
+        <ul>
+          <li>Sitio web completo</li>
+          <li>SEO avanzado + analítica</li>
+          <li>Diseño premium personalizado</li>
+          <li>Mantenimiento opcional</li>
+        </ul>
+
+        <a href="#">Comenzar</a>
+      </article>
+
+      <article>
+        <h3>Advanced</h3>
+
+        <p>Potencia y escalabilidad</p>
+
+        <strong>$461 USD</strong>
+
+        <ul>
+          <li>E-commerce completo</li>
+          <li>Integraciones IA</li>
+          <li>Dashboard personalizado</li>
+          <li>3 meses de soporte</li>
+        </ul>
+
+        <a href="#">Comenzar</a>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <span>Transforma tu presencia digital hoy</span>
+
+    <h2>
+      ¿Listo para llevar tu <br>
+      negocio al siguiente nivel?
+    </h2>
+
+    <p>
+      En Tech Tecnic combinamos innovación,
+      diseño y tecnología para crear experiencias digitales
+      que generan resultados reales.
+    </p>
+
+    <div>
+      <article>
+        <strong>50+</strong>
+        <span>Proyectos</span>
+      </article>
+
+      <article>
+        <strong>98%</strong>
+        <span>Satisfacción</span>
+      </article>
+
+      <article>
+        <strong><24h</strong>
+        <span>Respuesta</span>
+      </article>
+    </div>
+
+    <div>
+      <a href="#">Iniciar mi proyecto</a>
+      <a href="#">Ver planes</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>¿Listo para comenzar tu proyecto?</h2>
+
+    <p>
+      Contáctanos hoy y recibe una cotización personalizada sin compromiso.
+    </p>
+
+    <div>
+      <a href="#">Hablar por WhatsApp</a>
+      <a href="#">Enviar correo</a>
+    </div>
+
+    <small>
+      Respuesta en menos de 24 horas · Atención en Bogotá
+    </small>
+  </section>
+
+</main>

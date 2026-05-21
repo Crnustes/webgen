@@ -7,10 +7,10 @@
 ## WORKFLOW OBLIGATORIO (en orden estricto)
 
 ```
-FASE 1: Brand Intake  →  DESIGN.md
+FASE 1: Brand Intake  →  DESIGN.md + carpeta proyectos/[slug]/
 FASE 2: UIKit         →  uikit.html                           (requiere DESIGN.md aprobado)
 FASE 3: WP Theme      →  style.css + functions.php + main.js  (requiere UIKit aprobado)
-FASE 4+: Páginas      →  guía Elementor + CSS snippets        (requiere WP Theme aprobado)
+FASE 4+: Páginas      →  [slug-pagina].html (HTML real)        (requiere WP Theme aprobado)
 ```
 
 > **Plataforma:** WordPress + Elementor Pro.  
@@ -26,10 +26,11 @@ FASE 4+: Páginas      →  guía Elementor + CSS snippets        (requiere WP T
 **Trigger:** "nuevo proyecto", "empezar sitio", "brand intake", "dame el DESIGN.md"
 
 **Proceso:**
-1. Hacer preguntas de brief (ver `/skills/brand-intake/SKILL.md`)
-2. Generar `DESIGN.md` con las 9 secciones del formato awesome-claude-design
-3. Presentar al cliente para revisión
-4. Iterar hasta aprobación — nunca avanzar sin el DESIGN.md aprobado
+1. Preguntar el **slug del proyecto** y CREAR `proyectos/[slug]/_copy/_INSTRUCCIONES.md`
+2. Hacer preguntas de brief (ver `/skills/brand-intake/SKILL.md`)
+3. Generar `proyectos/[slug]/DESIGN.md` con las 9 secciones del formato awesome-claude-design
+4. Presentar al cliente para revisión
+5. Iterar hasta aprobación — nunca avanzar sin el DESIGN.md aprobado
 
 **Inputs que pedir al cliente:**
 - Nombre del negocio y descripción en 2 líneas
@@ -105,33 +106,24 @@ FASE 4+: Páginas      →  guía Elementor + CSS snippets        (requiere WP T
 
 ---
 
-## FASE 4+ — Páginas en Elementor → guía de construcción + CSS snippets
+## FASE 4+ — Páginas HTML reales
 
-**Trigger:** "crear página [nombre]", "guía para [about/servicio/contacto]"
+**Trigger:** "crear página [nombre]", "generar [about/servicio/contacto]", "html de [página]"
 
-**Prerequisito:** WP Theme aprobado. Cada página es independiente.
+**Prerequisito:** WP Theme aprobado (`proyectos/[slug]/wp-theme/style.css` existe).
 
-**Por cada página, generar:**
+**Por cada página, generar el archivo HTML completo:**
 
-1. **Guía de construcción sección por sección**
-   - Tipo de contenedor Elementor (Section / Container / Inner Section)
-   - Widgets a usar (Heading, Text Editor, Button, Image, Icon Box, etc.)
-   - Clases CSS custom a aplicar en el widget (campo CSS Classes en Advanced)
-   - Atributo `data-reveal` a añadir en Elementor → Advanced → Attributes
-
-2. **CSS global de la página** → pegar en Elementor → Edit Page → Custom CSS
-
-3. **CSS por sección** → pegar en Section → Edit → Advanced → Custom CSS
-
-4. **Schema.org JSON-LD** → widget HTML o via RankMath/Yoast
+1. **Leer el copy** desde `proyectos/[slug]/_copy/[slug-pagina].md` (si existe) o pedir inline
+2. **Generar `proyectos/[slug]/[slug-pagina].html`** con:
+   - `<link rel="stylesheet" href="wp-theme/style.css">` y clases `.wg-*`
+   - Secciones según tipo de página (hero, features, FAQ, CTA)
+   - SEO meta tags + Schema.org JSON-LD completos
+   - `data-reveal` para animaciones GSAP
+3. **Schema.org obligatorio:**
    - `WebPage` + `Organization` en todas
    - `Service` en páginas de servicio
    - `FAQPage` obligatorio en servicio y about
-
-5. **Metadatos SEO** → campos a completar en RankMath o Yoast:
-   - SEO Title, Meta Description, OG image, Canonical
-
-6. **Copys por sección** → listos para copiar y pegar en cada widget
 
 ---
 
