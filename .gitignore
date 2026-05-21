@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Node (por si se usan herramientas de build en el futuro)
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Outputs de proyectos de clientes (no versionar trabajo privado de clientes)
+proyectos/
+
+# Archivos temporales
+*.tmp
+*.log
