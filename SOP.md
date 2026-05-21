@@ -12,8 +12,8 @@
 2. [Setup del proyecto](#2-setup-del-proyecto)
 3. [Fase 1 — Brand Intake y DESIGN.md](#3-fase-1--brand-intake-y-designmd)
 4. [Fase 2 — UIKit](#4-fase-2--uikit)
-5. [Fase 3 — Home Page](#5-fase-3--home-page)
-6. [Fase 4 — Páginas internas](#6-fase-4--páginas-internas)
+5. [Fase 3 — WP Theme Setup](#5-fase-3--wp-theme-setup)
+6. [Fase 4 — Páginas en Elementor](#6-fase-4--páginas-en-elementor)
 7. [QA antes de entrega](#7-qa-antes-de-entrega)
 8. [Entrega y deploy](#8-entrega-y-deploy)
 9. [Post-entrega](#9-post-entrega)
@@ -88,19 +88,22 @@ cd proyectos/[nombre-cliente]
 
 ```
 proyectos/[cliente]/
-├── _assets/          ← Archivos del cliente (logos, fotos, brief)
+├── _assets/              ← Archivos del cliente (logos, fotos, brief)
 │   ├── logo.svg
 │   ├── fotos/
 │   └── brief-cliente.pdf
-├── _entregas/        ← ZIPs de cada entrega
-├── DESIGN.md         ← (se genera en Fase 1)
-├── uikit.html        ← (se genera en Fase 2)
-├── css/
-│   └── theme.css     ← (se genera en Fase 3)
-├── scripts/
-│   └── main.js       ← (se genera en Fase 3)
-├── img/              ← Imágenes optimizadas del sitio
-└── home.html         ← (se genera en Fase 3)
+├── _entregas/            ← ZIPs de cada entrega
+├── DESIGN.md             ← (se genera en Fase 1)
+├── uikit.html            ← (se genera en Fase 2)
+├── wp-theme/             ← (se genera en Fase 3 — va al child theme WP)
+│   ├── style.css         ← Tokens + CSS global
+│   ├── functions.php     ← Enqueue scripts/styles
+│   └── main.js           ← GSAP + Lenis + animaciones
+└── pages/                ← (se genera en Fase 4 — guías Elementor)
+    ├── home-guide.md
+    ├── about-guide.md
+    ├── [servicio]-guide.md
+    └── contacto-guide.md
 ```
 
 ### 2.3 Abrir el workspace
@@ -265,139 +268,82 @@ Con tu OK en esto, arrancamos el home en [fecha estimada].
 
 ---
 
-## 5. Fase 3 — Home Page
+## 5. Fase 3 — WP Theme Setup
 
-**Duración estimada:** 2–3 días  
-**Trigger para Copilot:** `"Generá el home para [cliente]"`
+**Duración estimada:** 1 día  
+**Trigger para Copilot:** `"Generá el theme de WordPress para [cliente]"`
 
-### 5.1 Recolección de copys
+### 5.1 Inputs previos
 
-Antes de generar, tener definidos:
+Antes de generar, confirmar con el cliente:
 
 ```
-COPYS PARA EL HOME
-
-HERO
-- Headline principal (H1): ___
-- Subheadline / lead: ___
-- CTA principal (texto del botón): ___
-- CTA secundario (si aplica): ___
-
-SECCIÓN DE BENEFICIOS / FEATURES
-- Título de la sección: ___
-- Feature 1: [título] + [descripción 1-2 líneas]
-- Feature 2: [título] + [descripción 1-2 líneas]
-- Feature 3: [título] + [descripción 1-2 líneas]
-
-CÓMO FUNCIONA / PROCESO
-- Paso 1: ___
-- Paso 2: ___
-- Paso 3: ___
-- Paso 4 (opcional): ___
-
-SOCIAL PROOF
-- Testimonial 1: [texto] — [nombre, rol, empresa]
-- Testimonial 2: [texto] — [nombre, rol, empresa]
-- Logos de clientes: [si aplica]
-
-CTA FINAL
-- Texto del CTA: ___
-- Refuerzo (1 oración): ___
-
-SEO
-- Keyword principal: ___ (ej: "agencia de marketing digital Bogotá")
-- Meta description (150-160 chars): ___
-- Dominio definitivo: ___
+THEME SETUP
+- Theme base instalado en WP: Hello Elementor / Astra / GeneratePress / otro
+- Nombre del child theme: ___
+- ¿Hay un functions.php existente? (sí / no)
+- Google Fonts a usar: (confirmadas en UIKit aprobado)
 ```
 
 ### 5.2 Generación
 
-Copilot genera:
-- `home.html` — página completa
-- `css/theme.css` — sistema de estilos extraído del UIKit
-- `scripts/main.js` — GSAP + Lenis + animaciones
+Copilot genera los 3 archivos del child theme:
+- `wp-theme/style.css` — tokens CSS + tipografía base + componentes + animaciones
+- `wp-theme/functions.php` — enqueue de Google Fonts, GSAP, Lenis, main.js
+- `wp-theme/main.js` — scroll reveal (GSAP + data-reveal), Lenis, header scroll
 
 ### 5.3 Revisión interna
 
-**Visual:**
-- [ ] Diseño consistente con el UIKit aprobado
-- [ ] Responsive: testar en 375px, 768px, 1280px, 1440px
-- [ ] Imágenes: todas tienen `alt`, `width`, `height`, `loading="lazy"`
-- [ ] Primera imagen del hero sin `loading="lazy"`
+- [ ] `style.css`: Cabecera WP correcta (Theme Name, Template matches el padre)
+- [ ] `style.css`: Todos los tokens del DESIGN.md están definidos en `:root`
+- [ ] `style.css`: Tipografía base aplica las fuentes aprobadas
+- [ ] `style.css`: Progressive enhancement funciona (`.js [data-reveal]`)
+- [ ] `functions.php`: Fuentes correctas en la URL de Google Fonts
+- [ ] `functions.php`: `main.js` se encola después de GSAP y Lenis
+- [ ] `main.js`: `classList.add('js')` es la primera línea
+- [ ] `main.js`: Lenis + GSAP setup correcto
 
-**SEO/GEO:**
-- [ ] `<title>` único con keyword principal
-- [ ] `<meta description>` 150–160 caracteres
-- [ ] `<link rel="canonical">` correcto
-- [ ] Open Graph completo (og:title, og:description, og:image, og:url)
-- [ ] Schema.org `Organization` + `WebPage` en JSON-LD
-- [ ] `<h1>` único con keyword principal
-- [ ] Un `<h2>` por sección
-- [ ] Bloque de entidad GEO en el hero lead
+### 5.4 Instalación en WordPress
 
-**Performance:**
-- [ ] Sin imágenes sin dimensiones
-- [ ] Google Fonts con `display=swap`
-- [ ] GSAP y Lenis cargados desde CDN con `defer`
-- [ ] Sin CSS/JS bloqueante en el `<head>`
-
-**Accesibilidad:**
-- [ ] Todos los links con texto descriptivo
-- [ ] `aria-label` en íconos sin texto
-- [ ] `<nav>` con `aria-label`
-- [ ] `<main id="main-content">` presente
-- [ ] Focus visible en todos los elementos interactivos
-- [ ] `prefers-reduced-motion` respetado
-
-### 5.4 Lighthouse check
-
-```
-Objetivo mínimo antes de presentar al cliente:
-Performance:   ≥ 90
-Accesibilidad: ≥ 90
-Best Practices: ≥ 90
-SEO:           100
-```
-
-Si Performance < 90:
-- Revisar imágenes sin dimensiones (causa Cumulative Layout Shift)
-- Revisar fuentes no preconnected
-- Revisar scripts bloqueantes
+1. Crear carpeta del child theme en `/wp-content/themes/[nombre-child]/`
+2. Subir `style.css` y `functions.php` a la raíz del child theme
+3. Crear subcarpeta `/js/` y subir `main.js`
+4. Activar el child theme: **WordPress → Apariencia → Temas**
+5. Verificar en el frontend que los tokens aplican correctamente
 
 ### 5.5 Presentación al cliente
 
 ```
-Aquí está el home de [nombre proyecto].
+Aquí están los archivos del theme.
 
-Antes de arrancar con las páginas internas, confirmame:
+Una vez instalado:
+✅ Los colores y tipografías de la marca aplican en todo el sitio
+✅ GSAP + Lenis están activos en todas las páginas
+✅ Las animaciones se activan agregando data-reveal en Elementor
 
-✅ El diseño en desktop y móvil se ve como esperabas
-✅ El headline del hero comunica bien la propuesta de valor
-✅ Los CTAs están en los lugares correctos
-✅ Las animaciones se sienten apropiadas (no distraen)
-✅ La estructura general de secciones tiene sentido
-
-También revisá el SEO:
-✅ El <title> es correcto: "[título actual]"
-✅ La meta description está bien: "[descripción actual]"
-✅ La keyword principal está en el H1
+Podemos arrancar a construir las páginas en Elementor.
+¿Algún ajuste antes de avanzar?
 ```
 
-**Gate: ⛔ No avanzar a Fase 4 sin aprobación escrita del home.**
+**Gate: ⛔ No avanzar a Fase 4 sin que el theme esté instalado y aprobado.**
 
 ---
 
-## 6. Fase 4 — Páginas internas
+## 6. Fase 4 — Páginas en Elementor
 
-**Duración estimada:** 1 día por página  
-**Trigger para Copilot:** `"Creá la página [tipo] para [cliente]"`
+**Duración estimada:** 1–2 días por página  
+**Trigger para Copilot:** `"Creá la guía Elementor para la página [tipo] de [cliente]"`
+
+> El header y footer los construye Elementor Pro (templates globales).  
+> WebGen genera la **guía de construcción** + CSS + copys + Schema.org por cada página.
 
 ### 6.1 Orden de producción recomendado
 
-1. `about.html` / `sobre-nosotros.html`
-2. Páginas de servicio (una por una)
-3. `casos.html` (si aplica)
-4. `contacto.html` (siempre última — contiene formulario)
+1. Home (primera página en construir en Elementor)
+2. About / Sobre nosotros
+3. Páginas de servicio (una por una)
+4. Casos (si aplica)
+5. Contacto (siempre última — tiene formulario)
 
 ### 6.2 Inputs por tipo de página
 
@@ -425,35 +371,33 @@ También revisá el SEO:
 **Para contacto:**
 ```
 - Campos del formulario: ___
-- Destino del formulario (email / CRM): ___
+- Destino del formulario (email / CRM / Elementor Form webhook): ___
 - Mensaje de confirmación tras envío: ___
 - Datos alternativos (WhatsApp, email directo): ___
 - Horario de atención: ___
 ```
 
-### 6.3 Reglas de consistencia obligatorias
+### 6.3 Qué recibe Copilot → qué entrega
 
-| Elemento | Regla |
+| Input | Output |
 |---|---|
-| `<header>` / nav | Idéntico al home — copiar HTML exacto |
-| `<footer>` | Idéntico al home — copiar HTML exacto |
-| Tokens CSS | Siempre los mismos de `theme.css` |
-| Kickers | Mismo estilo y clases |
-| Botones | Mismas clases del UIKit |
-| Schema FAQPage | **Obligatorio en TODAS las páginas internas** |
+| Tipo de página + copys + keyword | Guía sección por sección para Elementor |
+| — | CSS global (pegar en Edit Page → Custom CSS) |
+| — | CSS por sección (pegar en Section → Advanced → Custom CSS) |
+| — | Schema.org JSON-LD (widget HTML o RankMath) |
+| — | Campos SEO para RankMath/Yoast |
 
-### 6.4 Revisión por página
+### 6.4 Revisión por página (en Elementor, antes de publicar)
 
-Para cada página, verificar antes de presentar:
-
-- [ ] Nav y footer idénticos al home
-- [ ] `<title>` único (no repetir el del home)
-- [ ] `<meta description>` único de 150–160 chars
-- [ ] `<link rel="canonical">` correcto para esta URL
+- [ ] Tokens del theme aplicados (colores, fuentes vienen de `style.css`)
+- [ ] `data-reveal` agregado en las secciones que deben animarse
+- [ ] Clases `.wg-btn-primary`, `.wg-kicker` etc. aplicadas en los widgets
+- [ ] CSS de página pegado en Edit Page → Custom CSS
+- [ ] Schema.org JSON-LD widget HTML presente
+- [ ] RankMath/Yoast: SEO Title, Meta Description y Canonical configurados
 - [ ] `<h1>` único con keyword de la página
-- [ ] FAQ con Schema.org `FAQPage` en JSON-LD
-- [ ] `Schema.org Service` (en páginas de servicio)
-- [ ] Mobile responsive
+- [ ] FAQ con Schema.org `FAQPage` (servicio y about)
+- [ ] Visualizar en móvil dentro de Elementor antes de publicar
 
 ---
 
@@ -489,114 +433,106 @@ Hacer con el sitio completo antes del deploy:
 - [ ] Menú mobile abre y cierra correctamente
 - [ ] El CTA principal del nav funciona en todas las páginas
 
-**Performance (Lighthouse — todas las páginas):**
-- [ ] Home: Performance ≥ 90, SEO 100
-- [ ] Cada página interna: Performance ≥ 85, SEO 100
+**Performance (GTmetrix o PageSpeed Insights — todas las páginas):**
+- [ ] Home: Performance score ≥ 80 (WordPress tiene más overhead que HTML estático)
+- [ ] LCP < 2.5s
+- [ ] CLS < 0.1
+- [ ] FID / INP < 200ms
+
+**Elementor específico:**
+- [ ] Elementor → Settings → Advanced: habilitar "Improved Asset Loading"
+- [ ] Elementor → Settings → Advanced: habilitar "Lazy Load Background Images"
+- [ ] CSS Mode: "External File" (no inline)
+- [ ] Google Fonts: configurados en Elementor Site Settings (no duplicar los del theme)
 
 **Accesibilidad:**
 - [ ] Wave o axe: sin errores críticos
-- [ ] Navegación completa por teclado (Tab, Enter, Escape)
 - [ ] Contraste suficiente en todos los textos
 
-### 7.2 Checklist SEO final
+### 7.2 Checklist SEO en WordPress
 
-- [ ] No hay títulos duplicados entre páginas
-- [ ] No hay meta descriptions duplicadas
+- [ ] Plugin RankMath o Yoast activo y configurado
+- [ ] No hay SEO Titles duplicados entre páginas
+- [ ] No hay Meta Descriptions duplicadas
 - [ ] Canonical URL correcta en cada página
-- [ ] `robots.txt` permite indexación
-- [ ] `sitemap.xml` creado (manual o con herramienta)
-- [ ] Schema.org sin errores (validar en [schema.org/validator](https://validator.schema.org/))
-- [ ] Open Graph correcto (validar en [opengraph.xyz](https://www.opengraph.xyz/))
-- [ ] Google Search Console: propiedad creada y sitemap enviado
+- [ ] XML Sitemap activo (RankMath/Yoast lo genera automáticamente)
+- [ ] `robots.txt` sin bloqueos accidentales
+- [ ] Schema.org sin errores → validar en [schema.org/validator](https://validator.schema.org/)
+- [ ] Open Graph correcto → validar en [opengraph.xyz](https://www.opengraph.xyz/)
+- [ ] Google Search Console: propiedad verificada + sitemap enviado
+- [ ] Elementor: verificar que los H1 son únicos por página (no duplicar con el título de WP)
 
-### 7.3 Checklist de imágenes
+### 7.3 Checklist de imágenes en WordPress
 
-- [ ] Todas las imágenes optimizadas (< 200KB para fotos, < 50KB para íconos)
-- [ ] Formato WebP con fallback JPG/PNG donde corresponda
-- [ ] Todas tienen `alt` descriptivo
-- [ ] Todas tienen `width` y `height` definidos
-- [ ] Imágenes below-the-fold tienen `loading="lazy"`
+- [ ] Todas las imágenes optimizadas antes de subir (< 200KB fotos, < 50KB íconos)
+- [ ] Plugin de optimización activo: Imagify, ShortPixel o similar
+- [ ] Servir imágenes en WebP (Imagify/ShortPixel lo hacen automáticamente)
+- [ ] Lazy load activo (Elementor lo incluye nativamente)
+- [ ] Alt text descriptivo en cada imagen subida a la biblioteca
 
 ---
 
 ## 8. Entrega y deploy
 
-### 8.1 Preparar archivos para entrega
+### 8.1 Preparar archivos del child theme para entrega
 
 ```
-[cliente]-v1.0/
-├── index.html            ← Renombrar home.html
-├── about/
-│   └── index.html        ← Estructura de carpetas para URLs limpias
-├── servicios/
-│   ├── [servicio-1]/
-│   │   └── index.html
-│   └── [servicio-2]/
-│       └── index.html
-├── contacto/
-│   └── index.html
-├── css/
-│   └── theme.css
-├── scripts/
-│   └── main.js
-├── img/
-│   └── [todas las imágenes optimizadas]
-├── robots.txt
-└── sitemap.xml
+[cliente]-child-theme-v1.0/
+├── style.css         ← Tokens + CSS global
+├── functions.php     ← Enqueue scripts/styles
+└── js/
+    └── main.js       ← GSAP + Lenis + animaciones
 ```
 
-### 8.2 robots.txt mínimo
+Este ZIP se instala en WordPress como child theme.
 
-```
-User-agent: *
-Allow: /
+### 8.2 Checklist pre-lanzamiento en WordPress
 
-Sitemap: https://[dominio]/sitemap.xml
-```
+- [ ] Child theme activo en Apariencia → Temas
+- [ ] Elementor → Tools → Regenerate CSS & Data
+- [ ] Todas las páginas publicadas (no borrador)
+- [ ] Header y footer templates de Elementor Pro activos en todo el sitio
+- [ ] Formulario de contacto configurado con destino correcto
+- [ ] Elementor Form: acción post-submit configurada
+- [ ] Google Analytics / Tag Manager instalado (via plugin o `functions.php`)
+- [ ] RankMath/Yoast: sitemap activo y enviado a Search Console
+- [ ] Wordfence o plugin de seguridad activo
+- [ ] Plugin de caché activo: WP Rocket, LiteSpeed Cache o W3 Total Cache
 
-### 8.3 sitemap.xml básico
+### 8.3 Deploy / Migración (si aplica)
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://[dominio]/</loc><priority>1.0</priority></url>
-  <url><loc>https://[dominio]/about/</loc><priority>0.8</priority></url>
-  <url><loc>https://[dominio]/servicios/[s1]/</loc><priority>0.8</priority></url>
-  <url><loc>https://[dominio]/contacto/</loc><priority>0.7</priority></url>
-</urlset>
-```
+**Si el desarrollo fue en staging y hay que migrar a producción:**
 
-### 8.4 Deploy
+1. Usar **Duplicator Pro** o **All-in-One WP Migration** para exportar
+2. En producción: instalar WordPress limpio + importar
+3. O usar **WP Migrate DB Pro** solo para sincronizar la base de datos
+4. Actualizar URLs en la base de datos si el dominio cambia:
+   ```sql
+   UPDATE wp_options SET option_value = 'https://[dominio-nuevo]' WHERE option_name = 'siteurl';
+   UPDATE wp_options SET option_value = 'https://[dominio-nuevo]' WHERE option_name = 'home';
+   ```
+5. Actualizar canonical URLs en RankMath/Yoast
+6. Regenerar Elementor CSS: Tools → Regenerate
 
-**Opción A — Hosting compartido (cPanel):**
-1. Conectar por FTP (Filezilla o similar)
-2. Subir todo el contenido a `public_html/`
-3. Verificar permisos: carpetas 755, archivos 644
+**Si se construyó directamente en producción:**
+1. Verificar que el dominio apunta al servidor correcto
+2. Activar SSL/HTTPS (Let's Encrypt vía cPanel o Cloudflare)
+3. Forzar HTTPS: Settings → General → actualizar URLs a `https://`
 
-**Opción B — Vercel (recomendado para sitios estáticos):**
-```bash
-npm install -g vercel
-cd [carpeta-cliente]
-vercel --prod
-# Conectar dominio custom en el dashboard de Vercel
-```
-
-**Opción C — Netlify:**
-```bash
-# Arrastrar la carpeta al dashboard de Netlify
-# O conectar repo de GitHub
-```
-
-### 8.5 Post-deploy: verificar en producción
+### 8.4 Post-deploy: verificar en producción en WordPress
 
 - [ ] El sitio carga en `https://[dominio]/`
-- [ ] HTTPS activo (certificado SSL)
-- [ ] No hay recursos cargando por HTTP (mixed content)
-- [ ] Google Analytics/Tag Manager instalado y recibiendo datos
+- [ ] HTTPS activo + no hay mixed content (revisa en DevTools → Console)
+- [ ] Child theme activo y CSS cargando (verifica tokens en DevTools)
+- [ ] `main.js` cargando sin errores en consola del navegador
+- [ ] GSAP y Lenis activos — las animaciones `data-reveal` funcionan
+- [ ] Header y footer de Elementor Pro visibles en todas las páginas
+- [ ] Google Analytics / Tag Manager recibiendo eventos (chequear en Realtime)
+- [ ] Formulario de contacto: envío llega al destino correcto
 - [ ] Search Console: propiedad verificada + sitemap enviado
-- [ ] Formulario de contacto funciona en producción
+- [ ] PageSpeed Insights en producción: Performance ≥ 80 en móvil
 
-### 8.6 Entrega al cliente
+### 8.5 Entrega al cliente
 
 Documento de entrega (email o PDF):
 
@@ -606,15 +542,19 @@ ENTREGA FINAL — [Nombre Proyecto]
 Sitio en vivo: https://[dominio]/
 
 ARCHIVOS ENTREGADOS
-Se adjunta ZIP con todos los archivos fuente:
-- HTML de todas las páginas
-- CSS (theme.css)
-- JavaScript (main.js)
-- Imágenes optimizadas
+ZIP con el child theme instalado en tu sitio:
+- style.css — tokens de color, tipografía y componentes
+- functions.php — carga de scripts y estilos
+- js/main.js — animaciones y scroll suave
+
+ADEMAS SE INCLUYE (en _entregas/):
+- Guías Elementor de cada página ([pagina]-guide.md)
+- Schema.org JSON-LD de cada página
+- Campos SEO configurados en RankMath/Yoast
 
 ACCESOS CONFIGURADOS
-- Hosting: [proveedor] — credenciales en documento separado
-- Dominio: [registrador] — credenciales en documento separado
+- WordPress admin: [URL] — credenciales en documento separado
+- Elementor Pro: licencia activa en el sitio
 - Google Analytics: ID [G-XXXXXXXX]
 - Search Console: propiedad verificada
 
@@ -625,10 +565,10 @@ PÁGINAS ENTREGADAS
 ✅ Contacto (/contacto/)
 
 PRÓXIMOS PASOS RECOMENDADOS
-1. Revisar el sitio en tu dispositivo y red
-2. Confirmar que el formulario de contacto llega a tu casilla
-3. Completar o actualizar los textos placeholder (si los hay)
-4. Programar revisión SEO en 30 días
+1. Revisit el sitio en tu dispositivo y red
+2. Confirmá que el formulario de contacto llega a tu casilla
+3. Completá o actualizá los textos placeholder (si los hay)
+4. Programá revisión SEO en 30 días
 ```
 
 ---

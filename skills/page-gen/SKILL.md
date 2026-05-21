@@ -1,11 +1,14 @@
 ---
 name: page-gen
 description: |
-  Fase 4+: Genera páginas internas individuales.
-  Prerequisito estricto: Home aprobado por el cliente.
-  Trigger: "crear [página]", "página de [tipo]", "quiero la página de about/servicios/contacto".
+  Fase 4+: Genera guías de construcción para Elementor Pro + CSS snippets por página.
+  NO genera HTML standalone. Genera instrucciones sección por sección + CSS listo para pegar.
+  Prerequisito estricto: WP Theme aprobado.
+  Trigger: "crear página [nombre]", "guía para [about/servicio/contacto]", "armar [página]".
 triggers:
   - "crear página"
+  - "guía para"
+  - "armar página"
   - "página de about"
   - "página de servicio"
   - "página de contacto"
@@ -13,11 +16,282 @@ triggers:
   - "crear servicio"
   - "quiero la página de"
 od:
-  mode: prototype
-  preview:
-    type: html
-    entry: "[page].html"
+  mode: guide
+  outputs:
+    primary: pages/[slug]-guide.md
   design_system:
+    requires: true
+    sections: [color, typography, components, layout, responsive]
+  craft:
+    requires: [typography, animations, seo-geo, anti-slop]
+  inputs:
+    - name: page_type
+      type: enum
+      values: [about, servicio, contacto, casos, landing, custom]
+      required: true
+    - name: slug
+      type: string
+      required: true
+    - name: keyword
+      type: string
+      required: true
+---
+
+# page-gen — Fase 4: WP Theme aprobado → guías Elementor
+
+## Objetivo
+
+Generar una **guía de construcción para Elementor Pro** por cada página del sitio. La guía contiene:
+- Sección por sección: qué widgets usar, qué clases aplicar, qué atributos añadir
+- CSS snippets listos para pegar en Elementor
+- Copys listos para copiar en cada widget
+- Schema.org JSON-LD para pegar en widget HTML
+- Metadatos SEO para completar en RankMath/Yoast
+
+El header y footer los construye Elementor Pro. La guía **no los incluye**.
+
+---
+
+## Prerequisito
+
+**Verificar que el WP Theme fue aprobado.** Si no, responder:
+> "Para crear la guía Elementor necesito el WP Theme aprobado. ¿Generamos el theme ahora? (skill: wp-theme-gen)"
+
+---
+
+## Inputs necesarios antes de generar
+
+```
+1. Tipo de página: [about / servicio / contacto / casos / landing / custom]
+2. Slug/URL: /[slug]/ (ej: /sobre-nosotros/, /servicios/seo/)
+3. Keyword principal SEO: ___
+4. Copys:
+   → H1 de la página
+   → Intro / subheadline
+   → Contenido por sección (o dar libertad de propuesta)
+5. CTA de la página: ¿a dónde convierte? (formulario / WhatsApp / email)
+6. FAQ mínimo 5 preguntas (obligatorio para Schema FAQPage)
+```
+
+---
+
+## Workflow
+
+### Paso 1 — Leer DESIGN.md y UIKit
+
+1. Extraer tokens de color, tipografía, espaciado
+2. Identificar componentes aprobados del UIKit (kicker, cards, botones, FAQ)
+3. Seleccionar el template de estructura según el tipo de página
+
+### Paso 2 — Seleccionar estructura según tipo
+
+#### Tipo: `about`
+```
+Sección 1: Hero (H1 + lead + stats clave)
+Sección 2: Origen / Historia (texto + imagen)
+Sección 3: Valores o pilares (3–5 columnas con icon box)
+Sección 4: Equipo (si hay fotos)
+Sección 5: Por qué elegirnos / Beneficios
+Sección 6: CTA intermedio
+Sección 7: FAQ (mínimo 5 preguntas)
+Sección 8: CTA final
+```
+
+#### Tipo: `servicio`
+```
+Sección 1: Hero oscuro (H1 + lead + CTA)
+Sección 2: Pain points / El problema
+Sección 3: Beneficios / Qué incluye (3–4 features)
+Sección 4: Cómo trabajamos / Proceso (4–5 pasos)
+Sección 5: Estadísticas o datos del sector
+Sección 6: Resultados o casos (con datos)
+Sección 7: CTA final
+Sección 8: FAQ (mínimo 5 preguntas — Schema FAQPage obligatorio)
+```
+
+#### Tipo: `contacto`
+```
+Sección 1: Hero pequeño (H1 + lead)
+Sección 2: Formulario (Elementor Form widget)
+Sección 3: Datos alternativos (email, WhatsApp)
+Sección 4: FAQ breve (3–5 preguntas sobre el proceso de contacto)
+```
+
+#### Tipo: `landing`
+```
+Sección 1: Hero con CTA inmediato
+Sección 2: Problema (1 sección, breve)
+Sección 3: Solución / Beneficios (3 puntos)
+Sección 4: Prueba social (logos o testimonial)
+Sección 5: CTA repetido
+Sección 6: FAQ corto (3–5 preguntas)
+```
+
+### Paso 3 — Generar la guía de cada sección
+
+Formato de cada sección en la guía:
+
+```markdown
+## Sección [N] — [Nombre]
+
+**Elementor:**
+- Tipo: Container (Flexbox) / Section
+- Fondo: [color-token o imagen]
+- Padding: [valores de DESIGN.md]
+- CSS Class: `wg-section [clase-adicional]`
+- Attributes (Advanced): `data-reveal | up`
+
+**Widgets:**
+1. Heading (H[n])
+   - Texto: "[copy]"
+   - Tag: H2 (o H1 solo en el hero)
+   - CSS Class: (si aplica)
+2. Text Editor
+   - Texto: "[copy]"
+3. Button
+   - Texto: "[texto del CTA]"
+   - Link: [URL]
+   - CSS Class: `wg-btn-primary`
+
+**CSS custom de esta sección:**
+Pegar en: Section → Edit → Advanced → Custom CSS
+```css
+selector {
+  /* estilos específicos */
+}
+```
+```
+
+### Paso 4 — CSS global de la página
+
+Generar el CSS que va en **Elementor → Edit Page → Custom CSS** (o Elementor Site Settings → Custom CSS para estilos globales):
+
+```css
+/* CSS global de la página [slug] */
+/* Pegar en: Edit Page → Page Settings → Custom CSS */
+
+/* Sobreescrituras Elementor específicas de esta página */
+.page-[slug] .elementor-widget-heading h1 {
+  font-size: var(--text-hero);
+}
+```
+
+### Paso 5 — Schema.org JSON-LD
+
+Generar snippet listo para pegar en un **widget HTML de Elementor** (no requiere plugin):
+
+**Todas las páginas:**
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "[Título SEO]",
+      "description": "[Meta description]",
+      "url": "https://[dominio]/[slug]/"
+    },
+    {
+      "@type": "Organization",
+      "name": "[Marca]",
+      "url": "https://[dominio]/",
+      "logo": "https://[dominio]/[ruta-logo]"
+    }
+  ]
+}
+</script>
+```
+
+**Páginas de servicio — agregar al @graph:**
+```json
+{
+  "@type": "Service",
+  "name": "[Nombre del servicio]",
+  "description": "[Descripción]",
+  "provider": { "@type": "Organization", "name": "[Marca]" },
+  "areaServed": "[País/Región]"
+}
+```
+
+**FAQPage — obligatorio en servicio y about:**
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué es [tema]?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[Respuesta directa, 2–4 oraciones]"
+      }
+    }
+    /* ... mínimo 5 preguntas */
+  ]
+}
+</script>
+```
+
+### Paso 6 — Metadatos SEO (RankMath / Yoast)
+
+Generar tabla lista para completar en el plugin SEO:
+
+```
+SEO Title (50-60 chars):
+[Keyword principal] — [Marca]
+
+Meta Description (150-160 chars):
+[Keyword en primeras 30 chars]. [Propuesta de valor]. [CTA suave].
+
+URL / Slug:
+/[slug]/
+
+Canonical URL:
+https://[dominio]/[slug]/
+
+Focus Keyword:
+[keyword principal]
+
+OG Image:
+[Descripción de la imagen recomendada, 1200x630px]
+```
+
+### Paso 7 — Bloque de entidad GEO
+
+Primer texto visible de la página (pegar en primer widget Text Editor):
+
+```
+[Marca] es [categoría de negocio] especializada en [diferenciador]
+que ayuda a [audiencia] a [resultado concreto] en [mercado/región].
+```
+
+---
+
+## Cómo aplicar `data-reveal` en Elementor
+
+Para cada sección o widget que deba animarse:
+1. Editar elemento → **Advanced**
+2. Expandir **Attributes**
+3. Agregar: `data-reveal` | `up` (o `left`, `right`)
+4. Opcional: `data-delay` | `1` (para stagger manual: 1, 2, 3, 4)
+
+El `main.js` del theme detecta estos atributos y anima automáticamente con GSAP.
+
+---
+
+## Reglas de consistencia obligatorias
+
+| Elemento | Regla |
+|---|---|
+| Tokens CSS | Siempre los mismos de `style.css` del theme |
+| Kickers | Clase `.wg-kicker` en CSS Class del widget |
+| Botones | Clase `.wg-btn-primary` o `.wg-btn-secondary` |
+| Tipografía | Configurar en Elementor Site Settings para heredar del theme |
+| Schema FAQPage | Obligatorio en todas las páginas de servicio y about |
+| Bloque GEO | Obligatorio como primer texto visible de cada página |
     requires: true
     sections: [color, typography, components, layout, responsive]
   outputs:

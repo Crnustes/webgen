@@ -8,10 +8,14 @@
 
 ```
 FASE 1: Brand Intake  →  DESIGN.md
-FASE 2: UIKit         →  uikit.html        (requiere DESIGN.md aprobado)
-FASE 3: Home Page     →  home.html         (requiere UIKit aprobado)
-FASE 4+: Páginas      →  [slug].html       (requiere Home aprobado)
+FASE 2: UIKit         →  uikit.html                           (requiere DESIGN.md aprobado)
+FASE 3: WP Theme      →  style.css + functions.php + main.js  (requiere UIKit aprobado)
+FASE 4+: Páginas      →  guía Elementor + CSS snippets        (requiere WP Theme aprobado)
 ```
+
+> **Plataforma:** WordPress + Elementor Pro.  
+> El header y footer los construye **Elementor Pro** — WebGen no los genera.  
+> WebGen provee el CSS del theme (tokens, tipografía, animaciones) y guías de construcción por página.
 
 ⛔ **No saltar fases.** Cada fase requiere aprobación explícita del cliente antes de avanzar.
 
@@ -67,39 +71,67 @@ FASE 4+: Páginas      →  [slug].html       (requiere Home aprobado)
 
 ---
 
-## FASE 3 — Home Page → home.html
+## FASE 3 — WP Theme Setup → style.css + functions.php + main.js
 
-**Trigger:** "crear home", "página de inicio", después de UIKit aprobado
+**Trigger:** "setup del tema", "generar theme", "archivos del theme", después de UIKit aprobado
 
 **Prerequisito:** UIKit aprobado. Sin aprobación → no generar.
 
-**Estructura obligatoria del home:**
-1. `<header>` — Nav sticky, logo + links + CTA principal
-2. `<section id="hero">` — Impacto máximo: headline + subhead + CTA + visual
-3. `<section id="logos">` — Social proof: logos de clientes o medios
-4. `<section id="features">` — 3–6 beneficios o características clave
-5. `<section id="how">` — Cómo funciona / proceso en 3–5 pasos
-6. `<section id="proof">` — Testimonials, casos de éxito o métricas
-7. `<section id="pricing">` — Precios (si aplica)
-8. `<section id="cta">` — CTA final con urgencia o propuesta de valor
-9. `<footer>` — Links, redes, legal
+**Outputs obligatorios:**
 
-**Output:** `home.html` — completo, SEO+GEO optimizado, animaciones con GSAP+Lenis
+### `wp-theme/style.css`
+- Cabecera WordPress (`Theme Name`, `Template`, `Version`)
+- Tokens CSS en `:root` (colores, tipografía, espaciado, radii, sombras)
+- Reset mínimo
+- Tipografía base (`body`, `h1`–`h6`)
+- Clases de layout reutilizables (`.wg-container`, `.wg-section`)
+- Clases de componentes para Elementor (`.wg-btn-primary`, `.wg-kicker`, `.wg-card`)
+- Progressive enhancement para animaciones (`.js [data-reveal]`)
+- `@media (prefers-reduced-motion: reduce)`
+
+### `wp-theme/functions.php`
+- `wp_enqueue_scripts`: encolar `style.css`, Google Fonts, GSAP, Lenis, `main.js`
+- `add_theme_support`: `title-tag`, `post-thumbnails`, `html5`
+
+### `wp-theme/main.js`
+- `document.documentElement.classList.add('js')` — progressive enhancement
+- Inicialización de Lenis
+- Setup GSAP + ScrollTrigger
+- Scroll reveal en elementos con `[data-reveal]`
+- Header scroll: añadir `.scrolled` al `<header>` al hacer scroll
+- Compatibilidad Elementor: listener en `elementor/frontend/init` si hay widgets dinámicos
+
+**Nota:** Header y footer los construye Elementor Pro. Los tokens del theme aplican automáticamente.
 
 ---
 
-## FASE 4+ — Páginas adicionales → [slug].html
+## FASE 4+ — Páginas en Elementor → guía de construcción + CSS snippets
 
-**Trigger:** "[nombre de página]", "página de [servicio]", "crear [about/contacto/servicio]"
+**Trigger:** "crear página [nombre]", "guía para [about/servicio/contacto]"
 
-**Prerequisito:** Home aprobado. Cada página es independiente.
+**Prerequisito:** WP Theme aprobado. Cada página es independiente.
 
-**Por cada página:**
-- Lee `DESIGN.md` para tokens y estilo
-- Comparte nav y footer idénticos al home
-- Tiene SEO completo (title, description, OG, Schema.org)
-- FAQ obligatoria con `FAQPage` Schema en páginas de servicio/about
-- `<link rel="canonical">` propio
+**Por cada página, generar:**
+
+1. **Guía de construcción sección por sección**
+   - Tipo de contenedor Elementor (Section / Container / Inner Section)
+   - Widgets a usar (Heading, Text Editor, Button, Image, Icon Box, etc.)
+   - Clases CSS custom a aplicar en el widget (campo CSS Classes en Advanced)
+   - Atributo `data-reveal` a añadir en Elementor → Advanced → Attributes
+
+2. **CSS global de la página** → pegar en Elementor → Edit Page → Custom CSS
+
+3. **CSS por sección** → pegar en Section → Edit → Advanced → Custom CSS
+
+4. **Schema.org JSON-LD** → widget HTML o via RankMath/Yoast
+   - `WebPage` + `Organization` en todas
+   - `Service` en páginas de servicio
+   - `FAQPage` obligatorio en servicio y about
+
+5. **Metadatos SEO** → campos a completar en RankMath o Yoast:
+   - SEO Title, Meta Description, OG image, Canonical
+
+6. **Copys por sección** → listos para copiar y pegar en cada widget
 
 ---
 
@@ -304,100 +336,153 @@ Ver `/craft/seo-geo.md` para el checklist completo.
 
 ```
 [proyecto]/
-├── .github/
-│   └── copilot-instructions.md   ← copia de estas instrucciones adaptadas al cliente
-├── css/
-│   └── theme.css                 ← design tokens + componentes base
-├── scripts/
-│   └── main.js                   ← animaciones GSAP + interactividad
-├── img/                          ← imágenes optimizadas (WebP preferido)
-├── DESIGN.md                     ← sistema de diseño (Fase 1 output)
-├── uikit.html                    ← referencia visual (Fase 2 output)
-├── home.html                     ← página de inicio (Fase 3 output)
-├── about.html                    ← about (Fase 4)
-├── servicios/
-│   └── [servicio].html           ← páginas de servicio (Fase 4)
-└── contacto.html                 ← contacto (Fase 4)
+├── DESIGN.md                        ← Sistema de diseño (Fase 1 output)
+├── uikit.html                       ← Referencia visual aprobada (Fase 2 output)
+│
+├── wp-theme/                        ← Archivos para el child theme de WordPress
+│   ├── style.css                    ← Tokens + estilos globales (Fase 3 output)
+│   ├── functions.php                ← Enqueue scripts/styles (Fase 3 output)
+│   └── main.js                      ← GSAP + Lenis + scroll reveal (Fase 3 output)
+│
+└── pages/                           ← Guías Elementor por página (Fase 4 outputs)
+    ├── home-guide.md                ← Estructura + CSS + copy del home
+    ├── about-guide.md
+    ├── [servicio]-guide.md
+    └── contacto-guide.md
 ```
+
+### Dónde van los archivos en WordPress
+
+| Archivo WebGen | Destino en WordPress |
+|---|---|
+| `wp-theme/style.css` | Raíz del child theme |
+| `wp-theme/functions.php` | Raíz del child theme (merge con el existente) |
+| `wp-theme/main.js` | `/wp-content/themes/[child-theme]/js/main.js` |
+| CSS global de página (`pages/`) | Elementor → Edit Page → Custom CSS |
+| CSS de sección | Section → Advanced → Custom CSS |
+| Schema.org JSON-LD | Widget HTML o RankMath → Schema tab |
+| Metadatos SEO | RankMath o Yoast SEO (por página) |
 
 ---
 
-## TEMPLATE BASE — toda página nueva
+## TEMPLATES WORDPRESS
 
-```html
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[Keyword principal] | [Marca]</title>
-  <meta name="description" content="[150-160 chars con keyword y propuesta de valor]">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://[dominio]/[slug]/">
+### wp-theme/style.css — cabecera + tokens
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="es_ES">
-  <meta property="og:site_name" content="[Marca]">
-  <meta property="og:title" content="[Keyword] | [Marca]">
-  <meta property="og:description" content="[Descripción OG]">
-  <meta property="og:image" content="https://[dominio]/img/og-[slug].jpg">
-  <meta property="og:url" content="https://[dominio]/[slug]/">
-  <meta name="twitter:card" content="summary_large_image">
+```css
+/*
+Theme Name:  [Cliente] Child Theme
+Description: Child theme generado con WebGen
+Template:    hello-elementor
+Version:     1.0.0
+*/
 
-  <!-- Schema.org -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "name": "[Título]",
-        "description": "[Descripción]",
-        "url": "https://[dominio]/[slug]/"
-      },
-      {
-        "@type": "Organization",
-        "name": "[Marca]",
-        "url": "https://[dominio]/",
-        "logo": "https://[dominio]/img/logo.svg"
-      }
-    ]
-  }
-  </script>
+/* ── Tokens ── */
+:root {
+  /* Colores */
+  --color-bg:         [valor];
+  --color-bg-subtle:  [valor];
+  --color-surface:    [valor];
+  --color-text:       [valor];
+  --color-text-muted: [valor];
+  --color-accent:     [valor];
+  --color-border:     [valor];
 
-  <!-- Fonts (siempre preconnect) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="[URL Google Fonts]" rel="stylesheet">
+  /* Tipografía */
+  --font-display: '[Fuente Display]', sans-serif;
+  --font-body:    '[Fuente Body]', sans-serif;
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/theme.css">
-</head>
-<body>
+  /* Espaciado */
+  --space-xs:  clamp(8px,  1vw, 12px);
+  --space-sm:  clamp(16px, 2vw, 24px);
+  --space-md:  clamp(24px, 3vw, 40px);
+  --space-lg:  clamp(40px, 5vw, 64px);
+  --space-xl:  clamp(64px, 8vw, 120px);
 
-  <header id="site-header" role="banner">
-    <!-- Nav -->
-  </header>
+  /* Radii */
+  --radius-sm: [valor]; --radius-md: [valor]; --radius-lg: [valor];
 
-  <main id="main-content">
-    <!-- Secciones -->
-  </main>
+  /* Sombras */
+  --shadow-sm: [valor]; --shadow-md: [valor]; --shadow-lg: [valor];
+}
 
-  <footer id="site-footer" role="contentinfo">
-    <!-- Footer -->
-  </footer>
+/* ── Reset mínimo ── */
+*, *::before, *::after { box-sizing: border-box; }
 
-  <!-- GSAP -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js" defer></script>
-  <!-- Lenis -->
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" defer></script>
-  <!-- App -->
-  <script src="/scripts/main.js" defer></script>
-</body>
-</html>
+/* ── Tipografía base ── */
+body   { font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); text-wrap: balance; line-height: 1.15; }
+
+/* ── Layout ── */
+.wg-container { width: min(1280px, 92vw); margin: 0 auto; }
+.wg-section   { padding: var(--space-xl) 0; }
+
+/* ── Animaciones — progressive enhancement ── */
+[data-reveal] { /* visible sin JS */ }
+.js [data-reveal]            { opacity: 0; transform: translateY(24px); will-change: opacity, transform; }
+.js [data-reveal="left"]     { transform: translateX(-32px); }
+.js [data-reveal="right"]    { transform: translateX(32px); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
 ```
+
+### wp-theme/functions.php — enqueue estándar
+
+```php
+<?php
+function webgen_enqueue_assets() {
+    wp_enqueue_style( 'webgen-fonts',
+        'https://fonts.googleapis.com/css2?family=[Fuente1]:wght@[pesos]&family=[Fuente2]:wght@[pesos]&display=swap',
+        [], null );
+    wp_enqueue_style( 'webgen-theme',
+        get_stylesheet_directory_uri() . '/style.css',
+        ['webgen-fonts'], '1.0.0' );
+    wp_enqueue_script( 'gsap',
+        'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js',
+        [], '3.12.7', true );
+    wp_enqueue_script( 'gsap-st',
+        'https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js',
+        ['gsap'], '3.12.7', true );
+    wp_enqueue_script( 'lenis',
+        'https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js',
+        [], '1.1.14', true );
+    wp_enqueue_script( 'webgen-main',
+        get_stylesheet_directory_uri() . '/js/main.js',
+        ['gsap', 'gsap-st', 'lenis'], '1.0.0', true );
+}
+add_action( 'wp_enqueue_scripts', 'webgen_enqueue_assets' );
+
+function webgen_theme_setup() {
+    add_theme_support( 'title-tag' );
+    add_theme_support( 'post-thumbnails' );
+    add_theme_support( 'html5', ['search-form','comment-form','gallery','caption'] );
+}
+add_action( 'after_setup_theme', 'webgen_theme_setup' );
+```
+
+### Cómo aplicar `data-reveal` en Elementor
+
+1. Editar la sección o widget → **Advanced**
+2. En **Attributes** agregar: `data-reveal | up` (o `left`, `right`)
+3. El `main.js` del theme lo detecta y anima automáticamente
+
+### Schema.org en WordPress — 3 opciones
+
+**Opción A (recomendada):** RankMath → Schema tab por página  
+**Opción B:** Widget HTML de Elementor con el snippet JSON-LD:  
+```html
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@graph": [
+  { "@type": "WebPage", "name": "[Título]", "url": "[URL]" },
+  { "@type": "Organization", "name": "[Marca]", "url": "[Dominio]" }
+]}
+</script>
+```
+**Opción C:** Via `wp_head` hook en `functions.php` (para schemas globales)
 
 ---
 
@@ -408,14 +493,13 @@ Ver `/craft/seo-geo.md` para el checklist completo.
 | Generar HTML antes de DESIGN.md aprobado | Completar Fase 1 primero |
 | Generar páginas antes de UIKit aprobado | Completar Fase 2 primero |
 | `color: #6366f1` como acento (default de IA) | Color del brief del cliente |
-| Bootstrap, Tailwind, jQuery | CSS nativo + vanilla JS |
+| Bootstrap, Tailwind en archivos nuevos | CSS nativo con tokens |
 | animate.css, AOS | GSAP ScrollTrigger |
 | Gradientes de arco iris (3+ colores) | Máximo 2 colores en gradiente |
+| Generar HTML standalone para páginas WP | Generar guía Elementor + CSS snippets |
+| CSS inline en Elementor para estilos globales | Usar `style.css` del theme |
 | Stock photos de personas con traje mirando a cámara | Indicar prompt para imagen original |
-| Imágenes sin `alt` | `alt` descriptivo con contexto de negocio |
-| `<div>` donde hay semántica disponible | `<section>`, `<article>`, `<nav>`, `<aside>` |
-| CSS/JS inline para funcionalidades en theme.css/main.js | Usar los archivos compartidos |
-| Saltarse Schema.org en cualquier página | Siempre incluir JSON-LD |
+| Saltarse Schema.org en cualquier página | Siempre incluir JSON-LD (RankMath o widget HTML) |
 
 ---
 
@@ -432,5 +516,5 @@ Leer estos archivos antes de generar:
 
 - `/skills/brand-intake/SKILL.md` — Fase 1: Brief → DESIGN.md
 - `/skills/uikit-gen/SKILL.md` — Fase 2: DESIGN.md → uikit.html
-- `/skills/home-gen/SKILL.md` — Fase 3: Copy → home.html
-- `/skills/page-gen/SKILL.md` — Fase 4: Tipo + Copy → [page].html
+- `/skills/home-gen/SKILL.md` — Fase 3: UIKit aprobado → style.css + functions.php + main.js
+- `/skills/page-gen/SKILL.md` — Fase 4: Tipo + Copy → guía Elementor + CSS snippets
