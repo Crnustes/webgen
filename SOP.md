@@ -11,14 +11,15 @@
 1. [Pre-proyecto — Calificación y propuesta](#1-pre-proyecto)
 2. [Setup del proyecto](#2-setup-del-proyecto)
 3. [Fase 1 — Brand Intake y DESIGN.md](#3-fase-1--brand-intake-y-designmd)
-4. [Fase 2 — UIKit](#4-fase-2--uikit)
+4. [Fase 2 — Copy + UIKit](#4-fase-2--copy--uikit)
 5. [Fase 3 — WP Theme Setup](#5-fase-3--wp-theme-setup)
-6. [Fase 4 — Páginas en Elementor](#6-fase-4--páginas-en-elementor)
-7. [QA antes de entrega](#7-qa-antes-de-entrega)
-8. [Entrega y deploy](#8-entrega-y-deploy)
-9. [Post-entrega](#9-post-entrega)
-10. [Templates de comunicación](#10-templates-de-comunicación)
-11. [Checklist rápido de cierre](#11-checklist-rápido-de-cierre)
+6. [Fase 4 — Home (primera página)](#6-fase-4--home-primera-pagina)
+7. [Fase 5+ — Resto de páginas](#7-fase-5--resto-de-páginas)
+8. [QA antes de entrega](#8-qa-antes-de-entrega)
+9. [Entrega y deploy](#9-entrega-y-deploy)
+10. [Post-entrega](#10-post-entrega)
+11. [Templates de comunicación](#11-templates-de-comunicación)
+12. [Checklist rápido de cierre](#12-checklist-rápido-de-cierre)
 
 ---
 
@@ -92,18 +93,21 @@ proyectos/[cliente]/
 │   ├── logo.svg
 │   ├── fotos/
 │   └── brief-cliente.pdf
+├── _copy/                ← Copy de cada página (se crea en Fase 2)
+│   ├── _INSTRUCCIONES.md  ← Guía de estilo editorial para redactar el copy
+│   ├── home.md            ← Copy del home
+│   ├── about.md           ← Copy del about (si aplica)
+│   ├── [servicio].md      ← Copy por servicio
+│   └── contacto.md        ← Copy del contacto
 ├── _entregas/            ← ZIPs de cada entrega
 ├── DESIGN.md             ← (se genera en Fase 1)
 ├── uikit.html            ← (se genera en Fase 2)
 ├── wp-theme/             ← (se genera en Fase 3 — va al child theme WP)
-│   ├── style.css         ← Tokens + CSS global
-│   ├── functions.php     ← Enqueue scripts/styles
-│   └── main.js           ← GSAP + Lenis + animaciones
-└── pages/                ← (se genera en Fase 4 — guías Elementor)
-    ├── home-guide.md
-    ├── about-guide.md
-    ├── [servicio]-guide.md
-    └── contacto-guide.md
+│   ├── style.css           ← Tokens + CSS global
+│   ├── functions.php       ← Enqueue scripts/styles
+│   └── main.js             ← GSAP + Lenis + animaciones
+├── home.html             ← (se genera en Fase 4 — primera página, aprobación del cliente)
+└── [slug-pagina].html    ← (se genera en Fase 5+ — basadas en home aprobado)
 ```
 
 ### 2.3 Abrir el workspace
@@ -215,12 +219,34 @@ arrancamos a construir el UIKit (la biblioteca visual completa).
 
 ---
 
-## 4. Fase 2 — UIKit
+## 4. Fase 2 — Copy + UIKit
+
+### 4A. Copy de cada página
+
+**Duración estimada:** 1–3 días (depende de quién redacta)  
+**Trigger para Copilot:** `"Redactá el copy de la página [tipo] para [cliente]"`
+
+> ⛔ **El copy es obligatorio antes de generar cualquier página HTML.**  
+> Sin copy no se puede crear diseño real. Sin diseño real no se puede aprobar.
+
+Por cada página del proyecto, crear `proyectos/[slug]/_copy/[slug-pagina].md`:
+
+| Sección del copy | Qué incluye |
+|---|---|
+| **Hero** | H1 exacto + lead (2-3 oraciones) + kicker (si hay) |
+| **Secciones** | Título, intro y contenido de cada bloque |
+| **FAQ** | Mínimo 5 preguntas con respuestas completas |
+| **CTA final** | Texto del botón + destino (URL o anchor) |
+
+Si el cliente trae su propio copy → formatearlo y guardarlo en `_copy/`  
+Si no hay copy → redactar con Copilot usando el DESIGN.md como contexto
+
+**Gate: ⛔ No avanzar al UIKit ni al WP Theme sin tener el copy de TODAS las páginas.**
+
+### 4B. UIKit
 
 **Duración estimada:** 1–2 días  
 **Trigger para Copilot:** `"Creá el uikit para [cliente] con el DESIGN.md aprobado"`
-
-### 4.1 Generación
 
 Copilot genera `uikit.html` con todos los componentes visualmente renderizados:
 
@@ -261,7 +287,7 @@ construir las páginas. Revisá con atención:
 ✅ Formularios — ¿el formulario de contacto se ve profesional?
 ✅ Animaciones — ¿la velocidad y suavidad están bien?
 
-Con tu OK en esto, arrancamos el home en [fecha estimada].
+Con tu OK en esto, arrancamos a construir el home en [fecha estimada].
 ```
 
 **Gate: ⛔ No avanzar a Fase 3 sin aprobación escrita del UIKit.**
@@ -329,25 +355,72 @@ Podemos arrancar a construir las páginas en Elementor.
 
 ---
 
-## 6. Fase 4 — Páginas en Elementor
+## 6. Fase 4 — Home (primera página)
+
+**Duración estimada:** 1–2 días + iteraciones  
+**Trigger para Copilot:** `"Creá el home para [cliente]"`
+
+> El home es la primera página en construirse y la que define el lenguaje visual del sitio.  
+> Puede tener varias rondas de ajustes. No se avanza al resto de páginas hasta que el home esté aprobado.
+
+### 6.1 Generación
+
+1. Verificar que existe `proyectos/[slug]/_copy/home.md`
+2. Usar `page-gen` con tipo `home`
+3. Copilot lee el copy completo y genera `proyectos/[slug]/home.html`
+
+### 6.2 Revisiones e iteraciones
+
+- El cliente puede pedir ajustes de estructura, jerarquía, diseño o copy
+- Iterar hasta aprobación — sin límite de rondas definido por defecto
+- Cada iteración genera una nueva versión del `home.html`
+
+### 6.3 Presentación al cliente
+
+```
+Aquí está el home de [nombre proyecto].
+
+Este es el punto de partida visual de todo el sitio. Revisá con atención:
+
+✅ Estructura — ¿el orden de las secciones tiene sentido?
+✅ Jerarquía — ¿el h1 y el lead comunican lo que querés?
+✅ Copy — ¿los textos son los que acordamos? ¿hay algo a ajustar?
+✅ CTA — ¿la llamada a la acción principal es clara?
+✅ Diseño general — ¿la estética refleja tu marca?
+
+Cualquier cambio en esta etapa es bienvenido. Una vez aprobado,
+arrancaremos el resto de las páginas tomando este home como base.
+```
+
+**Gate: ⛔ No crear otras páginas hasta que el home esté aprobado por escrito.**
+
+---
+
+## 7. Fase 5+ — Resto de páginas
 
 **Duración estimada:** 1–2 días por página  
-**Trigger para Copilot:** `"Creá la guía Elementor para la página [tipo] de [cliente]"`
+**Trigger para Copilot:** `"Creá la página [tipo] para [cliente]"`
 
-> El header y footer los construye Elementor Pro (templates globales).  
-> WebGen genera la **guía de construcción** + CSS + copys + Schema.org por cada página.
+> Todas las páginas se generan usando el home aprobado como referencia visual.
 
-### 6.1 Orden de producción recomendado
+### 7.1 Orden de producción recomendado
 
-1. Home (primera página en construir en Elementor)
+1. ~~Home~~ (ya aprobado en Fase 4)
 2. About / Sobre nosotros
 3. Páginas de servicio (una por una)
 4. Casos (si aplica)
 5. Contacto (siempre última — tiene formulario)
 
-### 6.2 Inputs por tipo de página
+### 7.2 Por cada página
 
-**Para cada página de servicio:**
+1. Verificar que existe `proyectos/[slug]/_copy/[slug-pagina].md`
+2. Usar `page-gen` con el tipo correspondiente
+3. Copilot genera `proyectos/[slug]/[slug-pagina].html` con el copy real
+4. Revisar consistencia visual con `home.html`
+
+### 7.3 Inputs por tipo de página (si el copy no está en `_copy/`)
+
+**Para página de servicio:**
 ```
 - Nombre del servicio: ___
 - Keyword principal: ___
@@ -371,39 +444,29 @@ Podemos arrancar a construir las páginas en Elementor.
 **Para contacto:**
 ```
 - Campos del formulario: ___
-- Destino del formulario (email / CRM / Elementor Form webhook): ___
+- Destino del formulario (email / CRM / webhook): ___
 - Mensaje de confirmación tras envío: ___
 - Datos alternativos (WhatsApp, email directo): ___
 - Horario de atención: ___
 ```
 
-### 6.3 Qué recibe Copilot → qué entrega
+### 7.4 Revisión por página (antes de entregar)
 
-| Input | Output |
-|---|---|
-| Tipo de página + copys + keyword | Guía sección por sección para Elementor |
-| — | CSS global (pegar en Edit Page → Custom CSS) |
-| — | CSS por sección (pegar en Section → Advanced → Custom CSS) |
-| — | Schema.org JSON-LD (widget HTML o RankMath) |
-| — | Campos SEO para RankMath/Yoast |
-
-### 6.4 Revisión por página (en Elementor, antes de publicar)
-
-- [ ] Tokens del theme aplicados (colores, fuentes vienen de `style.css`)
-- [ ] `data-reveal` agregado en las secciones que deben animarse
-- [ ] Clases `.wg-btn-primary`, `.wg-kicker` etc. aplicadas en los widgets
-- [ ] CSS de página pegado en Edit Page → Custom CSS
-- [ ] Schema.org JSON-LD widget HTML presente
-- [ ] RankMath/Yoast: SEO Title, Meta Description y Canonical configurados
+- [ ] Copy del archivo `_copy/` usado sin modificar
+- [ ] Tokens del theme aplicados (colores, fuentes vienen de `wp-theme/style.css`)
+- [ ] `data-reveal` en las secciones que se animan
+- [ ] Consistencia visual con `home.html` (espaciados, componentes, estilo)
+- [ ] Schema.org JSON-LD presente
+- [ ] SEO Title, Meta Description y Canonical configurados
 - [ ] `<h1>` único con keyword de la página
 - [ ] FAQ con Schema.org `FAQPage` (servicio y about)
-- [ ] Visualizar en móvil dentro de Elementor antes de publicar
+- [ ] Visualizar en móvil antes de entregar
 
 ---
 
-## 7. QA antes de entrega
+## 8. QA antes de entrega
 
-### 7.1 Checklist de QA técnico
+### 8.1 Checklist de QA técnico
 
 Hacer con el sitio completo antes del deploy:
 
@@ -449,7 +512,7 @@ Hacer con el sitio completo antes del deploy:
 - [ ] Wave o axe: sin errores críticos
 - [ ] Contraste suficiente en todos los textos
 
-### 7.2 Checklist SEO en WordPress
+### 8.2 Checklist SEO en WordPress
 
 - [ ] Plugin RankMath o Yoast activo y configurado
 - [ ] No hay SEO Titles duplicados entre páginas

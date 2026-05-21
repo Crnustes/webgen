@@ -8,16 +8,18 @@
 
 ```
 FASE 1: Brand Intake  →  DESIGN.md + carpeta proyectos/[slug]/
-FASE 2: UIKit         →  uikit.html                           (requiere DESIGN.md aprobado)
-FASE 3: WP Theme      →  style.css + functions.php + main.js  (requiere UIKit aprobado)
-FASE 4+: Páginas      →  [slug-pagina].html (HTML real)        (requiere WP Theme aprobado)
+FASE 2: Copy + UIKit  →  _copy/[pagina].md × todas las páginas + uikit.html   (requiere DESIGN.md aprobado)
+FASE 3: WP Theme      →  style.css + functions.php + main.js                  (requiere Copy + UIKit aprobados)
+FASE 4: Home          →  home.html (iterar con cliente hasta aprobación)       (requiere WP Theme aprobado)
+FASE 5+: Otras páginas→  [slug-pagina].html, basadas en el home aprobado       (requiere Home aprobado)
 ```
 
 > **Plataforma:** WordPress + Elementor Pro.  
 > El header y footer los construye **Elementor Pro** — WebGen no los genera.  
-> WebGen provee el CSS del theme (tokens, tipografía, animaciones) y guías de construcción por página.
+> WebGen provee el CSS del theme (tokens, tipografía, animaciones) y los HTML de cada página.
 
-⛔ **No saltar fases.** Cada fase requiere aprobación explícita del cliente antes de avanzar.
+⛔ **No saltar fases.** Cada fase requiere aprobación explícita del cliente antes de avanzar.  
+⛔ **Sin copy no hay páginas.** Si no existe `_copy/[pagina].md`, pedir el copy antes de generar cualquier HTML.
 
 ---
 
@@ -43,7 +45,27 @@ FASE 4+: Páginas      →  [slug-pagina].html (HTML real)        (requiere WP T
 
 ---
 
-## FASE 2 — UIKit → uikit.html
+## FASE 2 — Copy + UIKit
+
+### 2A — Copy por página (`_copy/`)
+
+**Trigger:** "necesito el copy", "escribir copy", "preparar contenido", después de DESIGN.md aprobado
+
+**Objetivo:** Tener el copy real de CADA página antes de construir nada visual.
+
+**Por cada página del proyecto:**
+1. Crear `proyectos/[slug]/_copy/[slug-pagina].md` con:
+   - H1 exacto (con keyword principal)
+   - Lead / subheadline
+   - Copy de cada sección (títulos, cuerpos, bullets)
+   - Preguntas y respuestas del FAQ (mínimo 5)
+   - Texto y destino del CTA final
+2. Si el cliente trae su propio copy → formatear y guardar en `_copy/`
+3. Si no hay copy → redactar con el cliente antes de avanzar
+
+⛔ **Sin el archivo `_copy/[pagina].md` no se puede generar esa página.**
+
+### 2B — UIKit → uikit.html
 
 **Trigger:** "crear uikit", "generar sistema visual", después de DESIGN.md aprobado
 
@@ -76,7 +98,7 @@ FASE 4+: Páginas      →  [slug-pagina].html (HTML real)        (requiere WP T
 
 **Trigger:** "setup del tema", "generar theme", "archivos del theme", después de UIKit aprobado
 
-**Prerequisito:** UIKit aprobado. Sin aprobación → no generar.
+**Prerequisito:** Copy de todas las páginas listo + UIKit aprobado. Sin ambos → no generar.
 
 **Outputs obligatorios:**
 
@@ -106,16 +128,33 @@ FASE 4+: Páginas      →  [slug-pagina].html (HTML real)        (requiere WP T
 
 ---
 
-## FASE 4+ — Páginas HTML reales
+## FASE 4 — Home → primera página, aprobar antes de continuar
+
+**Trigger:** "crear home", "generar home", "html del home"
+
+**Prerequisito:** WP Theme aprobado + `proyectos/[slug]/_copy/home.md` existe.
+
+**Proceso:**
+1. Leer `_copy/home.md` completo (ver Paso 0 de `page-gen`)
+2. Generar `proyectos/[slug]/home.html` usando el copy real
+3. Presentar al cliente — puede haber varias iteraciones de diseño
+4. Cuando el cliente apruebe el home → ese diseño es la base de todas las demás páginas
+
+⛔ **No crear otras páginas hasta que el home esté aprobado.**  
+El resto de páginas heredan estructura, espaciado y estilo del home aprobado.
+
+---
+
+## FASE 5+ — Otras páginas (basadas en home aprobado)
 
 **Trigger:** "crear página [nombre]", "generar [about/servicio/contacto]", "html de [página]"
 
-**Prerequisito:** WP Theme aprobado (`proyectos/[slug]/wp-theme/style.css` existe).
+**Prerequisito:** Home aprobado + `proyectos/[slug]/_copy/[slug-pagina].md` existe.
 
 **Por cada página, generar el archivo HTML completo:**
 
-1. **Leer el copy** desde `proyectos/[slug]/_copy/[slug-pagina].md` (si existe) o pedir inline
-2. **Generar `proyectos/[slug]/[slug-pagina].html`** con:
+1. **Leer el copy** desde `proyectos/[slug]/_copy/[slug-pagina].md` (obligatorio)
+2. **Generar `proyectos/[slug]/[slug-pagina].html`** manteniendo consistencia visual con `home.html`:
    - `<link rel="stylesheet" href="wp-theme/style.css">` y clases `.wg-*`
    - Secciones según tipo de página (hero, features, FAQ, CTA)
    - SEO meta tags + Schema.org JSON-LD completos
